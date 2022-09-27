@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GermonenkoBy.Users", "Germo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermonenkoBy.Users.Core.Tests", "tests\GermonenkoBy.Users.Core.Tests\GermonenkoBy.Users.Core.Tests.csproj", "{408A86D0-4CAF-42F5-9CBA-B58BC29784C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermonenkoBy.Common.Web", "src\GermonenkoBy.Common.Web\GermonenkoBy.Common.Web.csproj", "{E093F150-DB2C-4DF5-8CA4-0DD2D20D47F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,7 @@ Global
 		{EC247624-9CD9-42FE-8B05-946C1CBA27A9} = {5B4722A9-9D4C-4AA5-B5B3-D5C324360C1B}
 		{1EEDC998-AB5C-4C4B-B6A1-99E1464D512D} = {329F2FB4-1E6B-41F9-B763-92012A366FBF}
 		{408A86D0-4CAF-42F5-9CBA-B58BC29784C8} = {1EEDC998-AB5C-4C4B-B6A1-99E1464D512D}
+		{E093F150-DB2C-4DF5-8CA4-0DD2D20D47F8} = {A0624CEA-EA49-4761-B71B-472530CC9B09}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BC710509-711B-4FD9-B335-45E24F98905C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -80,5 +83,9 @@ Global
 		{408A86D0-4CAF-42F5-9CBA-B58BC29784C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{408A86D0-4CAF-42F5-9CBA-B58BC29784C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{408A86D0-4CAF-42F5-9CBA-B58BC29784C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E093F150-DB2C-4DF5-8CA4-0DD2D20D47F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E093F150-DB2C-4DF5-8CA4-0DD2D20D47F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E093F150-DB2C-4DF5-8CA4-0DD2D20D47F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E093F150-DB2C-4DF5-8CA4-0DD2D20D47F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
