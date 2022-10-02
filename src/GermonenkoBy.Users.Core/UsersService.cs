@@ -1,10 +1,5 @@
-using System.ComponentModel.DataAnnotations;
-
-using Microsoft.EntityFrameworkCore;
-
 using GermonenkoBy.Common.Domain;
 using GermonenkoBy.Common.Domain.Exceptions;
-using GermonenkoBy.Common.EntityFramework.Extensions;
 using GermonenkoBy.Common.Utils.Hashing;
 using GermonenkoBy.Users.Core.Contracts;
 using GermonenkoBy.Users.Core.Dtos;
@@ -41,7 +36,7 @@ public class UsersService
 
     public async Task<User> CreateUserAsync(CreateUserDto userDto)
     {
-        EnsureUserIdValid(userDto);
+        CoreValidationHelper.EnsureEntityIsValid(userDto, "Данные пользователя некорректны!");
 
         if (!_passwordPolicy.PasswordMeetsPolicyRequirements(userDto.Password))
         {
@@ -68,7 +63,7 @@ public class UsersService
 
     public async Task<User> UpdateUserBasicDataAsync(int userId, ModifyUserDto userDto)
     {
-        EnsureUserIdValid(userDto);
+        CoreValidationHelper.EnsureEntityIsValid(userDto, "Данные пользователя некорректны!");
 
         var emailAddressIsInUse = _context.Users.Any(u => u.EmailAddress == userDto.EmailAddress && u.Id != userId);
         if (emailAddressIsInUse)
@@ -104,17 +99,11 @@ public class UsersService
 
     public async Task RemoveUserAsync(int userId)
     {
-        var userToRemove = await GetUserAsync(userId);
-        _context.Users.Remove(userToRemove);
-        await _context.SaveChangesAsync();
-    }
-
-    private void EnsureUserIdValid(ModifyUserDto userDto)
-    {
-        var validationResults = new List<ValidationResult>();
-        Validator.TryValidateObject(userDto, new ValidationContext(userDto), validationResults, true);
-        if (validationResults.Any()) {
-            throw new CoreLogicException(validationResults[0].ErrorMessage ?? "Данные пользователя некорректны!");
+        var user = await _context.Users.FindAsync(userId);
+        if (user is not null)
+        {
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
         }
     }
 }

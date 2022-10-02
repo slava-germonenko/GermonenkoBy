@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 using Microsoft.EntityFrameworkCore;
 
 using GermonenkoBy.Common.Domain;
@@ -50,36 +52,22 @@ public class UsersSearchService
             );
         }
 
-        switch (filter.OrderBy?.ToLower())
-        {
-            case "firstname":
-            {
-                query = filter.OrderDirection.Equals("desc", StringComparison.OrdinalIgnoreCase)
-                    ? query.OrderByDescending(user => user.FirstName)
-                    : query.OrderBy(user => user.FirstName);
-                break;
-            }
-            case "lastname":
-            {
-                query = filter.OrderDirection.Equals("desc", StringComparison.OrdinalIgnoreCase)
-                    ? query.OrderByDescending(user => user.LastName)
-                    : query.OrderBy(user => user.LastName);
-                break;
-            }
-            case "emailaddress":
-            {
-                query = filter.OrderDirection.Equals("desc", StringComparison.OrdinalIgnoreCase)
-                    ? query.OrderByDescending(user => user.EmailAddress)
-                    : query.OrderBy(user => user.EmailAddress);
-                break;
-            }
-            default:
-            {
-                query = query.OrderByDescending(user => user.CreatedDate);
-                break;
-            }
-        }
+        var descendingOrder = filter.OrderBy is not null
+                              && filter.OrderDirection.Equals("desc", StringComparison.OrdinalIgnoreCase);
 
-        return await query.ToPagedSet(filter);
+        Expression<Func<User, object>> orderKeySelector = filter.OrderBy?.ToLower() switch
+        {
+            "firstname" => user => user.FirstName,
+            "lastname" => user => user.LastName,
+            "emailaddress" => user => user.EmailAddress,
+            "updateddate" => user => user.UpdatedDate,
+            _ => user => user.CreatedDate
+        };
+
+        query = descendingOrder
+            ? query.OrderByDescending(orderKeySelector)
+            : query.OrderBy(orderKeySelector);
+
+        return await query.ToPagedSetAsync(filter);
     }
 }
