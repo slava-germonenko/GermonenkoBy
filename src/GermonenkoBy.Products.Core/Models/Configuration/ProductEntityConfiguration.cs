@@ -7,7 +7,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.HasMany(p => p.ProductPrices).WithOne()
+        builder.HasMany(p => p.Prices).WithOne()
             .HasForeignKey(pp => pp.ProductId)
             .OnDelete(DeleteBehavior.Cascade);
 

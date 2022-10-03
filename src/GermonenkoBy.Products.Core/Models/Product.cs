@@ -28,5 +28,7 @@ public class Product : IChangeDateTrackingModel
 
     public Category? Category { get; set; }
 
-    public ICollection<ProductPrice> ProductPrices { get; set; } = new List<ProductPrice>();
+    public ICollection<ProductPrice> Prices { get; set; } = new List<ProductPrice>();
+
+    public ICollection<ProductAsset> Assets { get; set; } = new List<ProductAsset>();
 }

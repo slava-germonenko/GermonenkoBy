@@ -14,6 +14,8 @@ public class ProductsContext : BaseContext
 
     public DbSet<Product> Products => Set<Product>();
 
+    public DbSet<ProductAsset> ProductAssets => Set<ProductAsset>();
+
     public DbSet<ProductPrice> ProductPrices => Set<ProductPrice>();
 
     public ProductsContext(DbContextOptions<ProductsContext> options) : base(options) { }

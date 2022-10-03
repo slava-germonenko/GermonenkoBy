@@ -21,7 +21,7 @@ public class ProductsSearchService
         var query = _context.Products
             .Include(p => p.Category)
             .Include(p => p.Material)
-            .Include(p => p.ProductPrices)
+            .Include(p => p.Prices)
             .AsNoTracking();
 
         if (filter.Name is not null)

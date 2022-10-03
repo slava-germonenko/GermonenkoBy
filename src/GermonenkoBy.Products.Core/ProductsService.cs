@@ -32,7 +32,7 @@ public class ProductsService
         var product = await _context.Products.AsNoTracking()
             .Include(p => p.Category)
             .Include(p => p.Material)
-            .Include(p => p.ProductPrices)
+            .Include(p => p.Prices)
             .FirstOrDefaultAsync(p => p.Id == productId);
 
         if (product is null)
@@ -68,7 +68,7 @@ public class ProductsService
 
         if (productDto.ProductPrices is not null)
         {
-            product.ProductPrices = productDto.ProductPrices
+            product.Prices = productDto.ProductPrices
                 .DistinctBy(dto => dto.PriceTypes)
                 .Select(dto => new ProductPrice
                 {
@@ -117,7 +117,7 @@ public class ProductsService
     public async Task<Product> SetProductPricesAsync(int productId, ICollection<AddProductPriceDto> productPrices)
     {
         var product = await GetProductAsync(productId);
-        product.ProductPrices = productPrices
+        product.Prices = productPrices
             .DistinctBy(dto => dto.PriceTypes)
             .Select(dto => new ProductPrice
             {
