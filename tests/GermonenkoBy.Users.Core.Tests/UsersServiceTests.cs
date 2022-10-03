@@ -319,21 +319,6 @@ public class UsersServiceTests
         Assert.IsNull(removedUser);
     }
 
-    [TestMethod]
-    public async Task DeleteUserThatNotExists_ShouldThrowNotFoundException()
-    {
-        var service = new UsersService(
-            _hasherMock.Object,
-            _alwaysCorrectPasswordPolicy.Object,
-            CreateInMemoryContext()
-        );
-
-        await Assert.ThrowsExceptionAsync<NotFoundException>(async () =>
-        {
-            await service.RemoveUserAsync(-1);
-        });
-    }
-
     private static UsersContext CreateInMemoryContext()
     {
         var optionsBuilder = new DbContextOptionsBuilder<UsersContext>();
