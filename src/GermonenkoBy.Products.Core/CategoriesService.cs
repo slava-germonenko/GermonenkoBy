@@ -66,7 +66,7 @@ public class CategoriesService
         return category;
     }
 
-    public async Task RemoveCategoryAsync(int categoryId, int? assignTo)
+    public async Task RemoveCategoryAsync(int categoryId, int? assignTo = null)
     {
         var category = await _context.Categories.FindAsync(categoryId);
         if (category is null)
