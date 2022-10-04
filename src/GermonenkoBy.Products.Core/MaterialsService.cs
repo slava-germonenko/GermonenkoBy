@@ -1,7 +1,7 @@
-using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
 using GermonenkoBy.Common.Domain.Exceptions;
+using GermonenkoBy.Products.Core.Contracts;
 using GermonenkoBy.Products.Core.Dtos;
 using GermonenkoBy.Products.Core.Models;
 
@@ -11,9 +11,15 @@ public class MaterialsService
 {
     private readonly ProductsContext _context;
 
-    public MaterialsService(ProductsContext context)
+    private readonly IBulkMaterialsRepository _bulkMaterialsRepository;
+
+    public MaterialsService(
+        ProductsContext context,
+        IBulkMaterialsRepository bulkMaterialsRepository
+    )
     {
         _context = context;
+        _bulkMaterialsRepository = bulkMaterialsRepository;
     }
 
     public async Task<Material> GetMaterialAsync(int materialId)
@@ -57,6 +63,8 @@ public class MaterialsService
             throw new NotFoundException($"Материал с идентификатором {materialId} не найден.");
         }
 
+        material.Name = materialDto.Name;
+
         _context.Materials.Update(material);
         await _context.SaveChangesAsync();
         return material;
@@ -67,8 +75,7 @@ public class MaterialsService
         var material = await _context.Materials.FindAsync(materialId);
         if (material is not null)
         {
-            await _context.Products.Where(p => p.Material.Id == materialId)
-                .BatchUpdateAsync(p => new Product { Material = null });
+            await _bulkMaterialsRepository.ReassignMaterialAsync(materialId, null);
             _context.Materials.Remove(material);
             await _context.SaveChangesAsync();
         }
