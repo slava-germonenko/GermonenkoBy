@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using GermonenkoBy.Common.Domain.Exceptions;
 using GermonenkoBy.Products.Core.Contracts;
+using GermonenkoBy.Products.Core.Contracts.Repositories;
 using GermonenkoBy.Products.Core.Dtos;
 using GermonenkoBy.Products.Core.Models;
 

@@ -22,6 +22,7 @@ public class ProductsContext : BaseContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new ProductAssetEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ProductEntityConfiguration());
         modelBuilder.ApplyConfiguration(new ProductPriceEntityConfiguration());
         base.OnModelCreating(modelBuilder);
