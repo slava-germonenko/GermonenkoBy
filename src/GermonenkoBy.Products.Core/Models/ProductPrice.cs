@@ -6,7 +6,7 @@ public class ProductPrice
 {
     public int ProductId { get; set; }
 
-    public double Price { get; set; }
+    public decimal Price { get; set; }
 
     public ProductPriceTypes PriceType { get; set; }
 }
