@@ -64,6 +64,23 @@ public class AssetsService
         return asset;
     }
 
+    public async Task DeleteAssetAsync(int assetId)
+    {
+        var asset = await _context.ProductAssets.FindAsync(assetId);
+        if (asset is null)
+        {
+            return;
+        }
+
+        if (asset.FileName is not null)
+        {
+            await _assetsBlobClient.DeleteAssetAsync(asset.FileName);
+        }
+
+        _context.ProductAssets.Remove(asset);
+        await _context.SaveChangesAsync();
+    }
+
     private async Task EnsureProductExists(int productId)
     {
         var productExists = await _context.Products.AnyAsync(p => p.Id == productId);
