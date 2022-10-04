@@ -9,9 +9,11 @@ public class ProductAsset
     [Range(0, int.MaxValue)]
     public int Order { get; set; }
 
-    public int ProductId { get; set; }
+    public int? ProductId { get; set; }
+
+    public string? FileName { get; set; }
 
     public Uri? BlobUri { get; set; }
 
-    public int Size { get; set; }
+    public long Size { get; set; }
 }

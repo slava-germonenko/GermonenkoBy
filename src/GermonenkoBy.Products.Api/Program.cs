@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Products.Core;
-using GermonenkoBy.Products.Core.Contracts;
+using GermonenkoBy.Products.Core.Contracts.Clients;
+using GermonenkoBy.Products.Core.Contracts.Repositories;
+using GermonenkoBy.Products.Infrastructure.Clients;
 using GermonenkoBy.Products.Infrastructure.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,12 +32,20 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var connectionString = builder.Configuration.GetValue<string>("CoreDatabaseConnectionString");
+var sqlConnectionString = builder.Configuration.GetValue<string>("CoreDatabaseConnectionString");
 builder.Services.AddDbContext<ProductsContext>(contextOptionsBuilder =>
 {
-    contextOptionsBuilder.UseSqlServer(connectionString);
+    contextOptionsBuilder.UseSqlServer(sqlConnectionString);
 });
 
+var storageConnectionString = builder.Configuration.GetValue<string>("StorageAccountConnectionString");
+builder.Services.AddAzureClients(azureBuilder =>
+{
+    azureBuilder.AddBlobServiceClient(storageConnectionString);
+});
+
+builder.Services.AddScoped<IAssetsBlobClient, AzureAssetsBlobClient>();
+builder.Services.AddScoped<AssetsService>();
 builder.Services.AddScoped<IBulkCategoriesRepository, BulkCategoriesRepository>();
 builder.Services.AddScoped<IBulkMaterialsRepository, BulkMaterialsRepository>();
 builder.Services.AddScoped<CategoriesSearchService>();

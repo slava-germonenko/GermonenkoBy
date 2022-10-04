@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using GermonenkoBy.Products.Core;
 using GermonenkoBy.Products.Core.Contracts;
+using GermonenkoBy.Products.Core.Contracts.Repositories;
 
 namespace GermonenkoBy.Products.Infrastructure.Contracts;
 

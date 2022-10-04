@@ -1,4 +1,4 @@
-namespace GermonenkoBy.Products.Core.Contracts;
+namespace GermonenkoBy.Products.Core.Contracts.Repositories;
 
 public interface IBulkCategoriesRepository
 {

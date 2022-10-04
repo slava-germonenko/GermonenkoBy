@@ -33,6 +33,7 @@ public class ProductsService
             .Include(p => p.Category)
             .Include(p => p.Material)
             .Include(p => p.Prices)
+            .Include(p => p.Assets)
             .FirstOrDefaultAsync(p => p.Id == productId);
 
         if (product is null)
