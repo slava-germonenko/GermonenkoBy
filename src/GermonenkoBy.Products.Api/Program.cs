@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Products.Core;
@@ -10,7 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 var appConfigConnectionString = builder.Configuration.GetValue<string>("AppConfigConnectionString");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
-    builder.Configuration.AddAzureAppConfiguration(appConfigConnectionString);
+    builder.Configuration.AddAzureAppConfiguration(options =>
+    {
+        options.Connect(appConfigConnectionString)
+            .Select(KeyFilter.Any)
+            .Select(KeyFilter.Any, builder.Environment.EnvironmentName);
+    });
 }
 
 builder.Services.AddControllers();
