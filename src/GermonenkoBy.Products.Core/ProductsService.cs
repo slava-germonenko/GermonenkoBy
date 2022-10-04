@@ -69,10 +69,10 @@ public class ProductsService
         if (productDto.ProductPrices is not null)
         {
             product.Prices = productDto.ProductPrices
-                .DistinctBy(dto => dto.PriceTypes)
+                .DistinctBy(dto => dto.PriceType)
                 .Select(dto => new ProductPrice
                 {
-                    PriceType = dto.PriceTypes,
+                    PriceType = dto.PriceType,
                     Price = dto.Price
                 })
                 .ToList();
@@ -118,10 +118,10 @@ public class ProductsService
     {
         var product = await GetProductAsync(productId);
         product.Prices = productPrices
-            .DistinctBy(dto => dto.PriceTypes)
+            .DistinctBy(dto => dto.PriceType)
             .Select(dto => new ProductPrice
             {
-                PriceType = dto.PriceTypes,
+                PriceType = dto.PriceType,
                 Price = dto.Price
             })
             .ToList();

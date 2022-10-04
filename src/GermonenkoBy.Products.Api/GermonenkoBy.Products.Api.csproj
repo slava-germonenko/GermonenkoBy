@@ -18,6 +18,7 @@
     <ItemGroup>
       <ProjectReference Include="..\GermonenkoBy.Common.Web\GermonenkoBy.Common.Web.csproj" />
       <ProjectReference Include="..\GermonenkoBy.Products.Core\GermonenkoBy.Products.Core.csproj" />
+      <ProjectReference Include="..\GermonenkoBy.Products.Infrastructure\GermonenkoBy.Products.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

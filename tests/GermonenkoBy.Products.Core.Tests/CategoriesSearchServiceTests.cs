@@ -4,7 +4,6 @@ namespace GermonenkoBy.Products.Core.Tests;
 public class CategoriesSearchServiceTests : BaseProductModuleTest
 {
     [TestMethod]
-
     public async Task SearchCategories_ShouldReturnCorrectResults()
     {
         var context = CreateInMemoryContext();

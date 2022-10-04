@@ -1,7 +1,7 @@
-using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
 using GermonenkoBy.Common.Domain.Exceptions;
+using GermonenkoBy.Products.Core.Contracts;
 using GermonenkoBy.Products.Core.Dtos;
 using GermonenkoBy.Products.Core.Models;
 
@@ -11,9 +11,15 @@ public class CategoriesService
 {
     private readonly ProductsContext _context;
 
-    public CategoriesService(ProductsContext context)
+    private readonly IBulkCategoriesRepository _bulkCategoriesRepository;
+
+    public CategoriesService(
+        ProductsContext context,
+        IBulkCategoriesRepository bulkCategoriesRepository
+    )
     {
         _context = context;
+        _bulkCategoriesRepository = bulkCategoriesRepository;
     }
 
     public async Task<Category> GetCategoryAsync(int categoryId)
@@ -76,11 +82,14 @@ public class CategoriesService
 
         if (assignTo is not null)
         {
-            var newCategory = await GetCategoryAsync(assignTo.Value);
-            await _context.Products
-                .Where(p => p.Category.Id == categoryId)
-                .BatchUpdateAsync(p => new Product{ Category = newCategory });
+            var assignToCategoryExists = await _context.Categories.AnyAsync(c => c.Id == assignTo.Value);
+            if (!assignToCategoryExists)
+            {
+                throw new NotFoundException($"Категория товаров с индентификатором \"{assignTo.Value}\" не найдена.");
+            }
         }
+
+        await _bulkCategoriesRepository.ReassignCategoryAsync(categoryId, categoryId);
 
         _context.Categories.Remove(category);
         await _context.SaveChangesAsync();

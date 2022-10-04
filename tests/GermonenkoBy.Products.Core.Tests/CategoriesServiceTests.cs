@@ -1,7 +1,10 @@
+using Microsoft.EntityFrameworkCore;
+using Moq;
+
 using GermonenkoBy.Common.Domain.Exceptions;
+using GermonenkoBy.Products.Core.Contracts;
 using GermonenkoBy.Products.Core.Dtos;
 using GermonenkoBy.Products.Core.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace GermonenkoBy.Products.Core.Tests;
 
@@ -10,6 +13,21 @@ public class CategoriesServiceTests : BaseProductModuleTest
 {
     private const int DefaultTestCategoryId = 1;
 
+    private readonly Mock<IBulkCategoriesRepository> _bulkCategoriesRepositoryMock = new();
+
+    private IBulkCategoriesRepository BulkRepository => _bulkCategoriesRepositoryMock.Object;
+
+    public CategoriesServiceTests()
+    {
+        _bulkCategoriesRepositoryMock.Setup(
+                repo => repo.ReassignCategoryAsync(
+                    It.IsAny<int>(),
+                    It.IsAny<int?>()
+                )
+            )
+            .Returns(Task.CompletedTask);
+    }
+
     [TestMethod]
     public async Task GetCategory_ShouldReturnCategory()
     {
@@ -17,7 +35,7 @@ public class CategoriesServiceTests : BaseProductModuleTest
         context.Categories.Add(new Category { Id = DefaultTestCategoryId, Name = "test"});
         await context.SaveChangesAsync();
 
-        var service = new CategoriesService(context);
+        var service = new CategoriesService(context, BulkRepository);
 
         var category = await service.GetCategoryAsync(DefaultTestCategoryId);
         Assert.AreEqual("test", category.Name);
@@ -26,7 +44,7 @@ public class CategoriesServiceTests : BaseProductModuleTest
     [TestMethod]
     public async Task GetNotExistingCategory_ShouldThrowNotFoundException()
     {
-        var service = new CategoriesService(CreateInMemoryContext());
+        var service = new CategoriesService(CreateInMemoryContext(), BulkRepository);
 
         await Assert.ThrowsExceptionAsync<NotFoundException>(async () =>
         {
@@ -38,7 +56,7 @@ public class CategoriesServiceTests : BaseProductModuleTest
     public async Task CreateCategory_ShouldCreateCategory()
     {
         var context = CreateInMemoryContext();
-        var service = new CategoriesService(context);
+        var service = new CategoriesService(context, BulkRepository);
 
         await service.CreateCategoryAsync(new()
         {
@@ -52,7 +70,7 @@ public class CategoriesServiceTests : BaseProductModuleTest
     [TestMethod]
     public async Task CreateDuplicateCategory_ShouldThrowCoreLogicException()
     {
-        var service = new CategoriesService(CreateInMemoryContext());
+        var service = new CategoriesService(CreateInMemoryContext(), BulkRepository);
 
         await service.CreateCategoryAsync(new()
         {
@@ -71,7 +89,7 @@ public class CategoriesServiceTests : BaseProductModuleTest
     [TestMethod]
     public async Task UpdateCategory_ShouldUpdateCategory()
     {
-        var service = new CategoriesService(CreateInMemoryContext());
+        var service = new CategoriesService(CreateInMemoryContext(), BulkRepository);
         var category = await service.CreateCategoryAsync(new()
         {
             Name = "Test",
@@ -87,7 +105,7 @@ public class CategoriesServiceTests : BaseProductModuleTest
     [TestMethod]
     public async Task UpdateCategoryWithDuplicateName_ShouldThrowCoreLogicException()
     {
-        var service = new CategoriesService(CreateInMemoryContext());
+        var service = new CategoriesService(CreateInMemoryContext(), BulkRepository);
         await service.CreateCategoryAsync(new() { Name = "Test" });
         var category = await service.CreateCategoryAsync(new() { Name = "Test2" });
 
@@ -100,7 +118,7 @@ public class CategoriesServiceTests : BaseProductModuleTest
     [TestMethod]
     public async Task UpdateMissingCategory_ShouldThrowNotFoundException()
     {
-        var service = new CategoriesService(CreateInMemoryContext());
+        var service = new CategoriesService(CreateInMemoryContext(), BulkRepository);
 
         await Assert.ThrowsExceptionAsync<NotFoundException>(async () =>
         {
@@ -112,7 +130,7 @@ public class CategoriesServiceTests : BaseProductModuleTest
     public async Task RemoveCategory_ShouldRemoveCategoryAndUpdateProducts()
     {
         var context = CreateInMemoryContext();
-        var service = new CategoriesService(context);
+        var service = new CategoriesService(context, BulkRepository);
 
         var category = new Category
         {

@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Products.Core;
+using GermonenkoBy.Products.Core.Contracts;
+using GermonenkoBy.Products.Infrastructure.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,8 @@ builder.Services.AddDbContext<ProductsContext>(contextOptionsBuilder =>
     contextOptionsBuilder.UseSqlServer(connectionString);
 });
 
+builder.Services.AddScoped<IBulkCategoriesRepository, BulkCategoriesRepository>();
+builder.Services.AddScoped<IBulkMaterialsRepository, BulkMaterialsRepository>();
 builder.Services.AddScoped<CategoriesSearchService>();
 builder.Services.AddScoped<CategoriesService>();
 builder.Services.AddScoped<MaterialsSearchService>();
