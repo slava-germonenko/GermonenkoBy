@@ -2,10 +2,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
+using GermonenkoBy.Common.HostedServices;
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Products.Core;
 using GermonenkoBy.Products.Core.Contracts.Clients;
 using GermonenkoBy.Products.Core.Contracts.Repositories;
+using GermonenkoBy.Products.Core.HostedServices;
 using GermonenkoBy.Products.Infrastructure.Clients;
 using GermonenkoBy.Products.Infrastructure.Contracts;
 
@@ -54,6 +56,8 @@ builder.Services.AddScoped<MaterialsSearchService>();
 builder.Services.AddScoped<MaterialsService>();
 builder.Services.AddScoped<ProductsSearchService>();
 builder.Services.AddScoped<ProductsService>();
+
+builder.Services.RegisterHostedService<AssetsCleanupService>(TimeSpan.FromHours(1));
 
 var app = builder.Build();
 

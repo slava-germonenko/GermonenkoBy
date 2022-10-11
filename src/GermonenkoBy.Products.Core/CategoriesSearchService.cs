@@ -37,7 +37,7 @@ public class CategoriesSearchService
 
         Expression<Func<Category, object>> orderKeySelector = filter.OrderBy?.ToLower() switch
         {
-            "updateddate" => category => category.UpdatedDate,
+            "updateddate" => category => category.UpdatedDate!,
             "name" => category => category.Name,
             _ => category => category.CreatedDate
         };
