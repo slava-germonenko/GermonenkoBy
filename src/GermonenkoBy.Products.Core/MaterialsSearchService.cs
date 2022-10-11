@@ -37,7 +37,7 @@ public class MaterialsSearchService
 
         Expression<Func<Material, object>> orderKeySelector = filter.OrderBy?.ToLower() switch
         {
-            "updateddate" => material => material.UpdatedDate,
+            "updateddate" => material => material.UpdatedDate!,
             "name" => material => material.Name,
             _ => material => material.CreatedDate
         };

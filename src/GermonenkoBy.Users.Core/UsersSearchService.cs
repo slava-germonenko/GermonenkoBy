@@ -60,7 +60,7 @@ public class UsersSearchService
             "firstname" => user => user.FirstName,
             "lastname" => user => user.LastName,
             "emailaddress" => user => user.EmailAddress,
-            "updateddate" => user => user.UpdatedDate,
+            "updateddate" => user => user.UpdatedDate!,
             _ => user => user.CreatedDate
         };
 

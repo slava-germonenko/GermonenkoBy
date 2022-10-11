@@ -46,12 +46,12 @@ public class ProductsSearchService
 
         if (filter.MaterialId is not null)
         {
-            query = query.Where(p => p.Material.Id == filter.MaterialId);
+            query = query.Where(p => p.Material!.Id == filter.MaterialId);
         }
 
         if (filter.CategoryId is not null)
         {
-            query = query.Where(p => p.Category.Id == filter.CategoryId);
+            query = query.Where(p => p.Category!.Id == filter.CategoryId);
         }
 
         var search = filter.Search;
