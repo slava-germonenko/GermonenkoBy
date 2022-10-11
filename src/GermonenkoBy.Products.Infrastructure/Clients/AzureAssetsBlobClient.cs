@@ -1,4 +1,5 @@
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 using GermonenkoBy.Products.Core.Contracts.Clients;
 
@@ -15,11 +16,21 @@ public class AzureAssetsBlobClient : IAssetsBlobClient
         _blobServiceClient = blobServiceClient;
     }
 
-    public async Task<Uri> UploadAssetAsync(string fileName, byte[] content)
+    public async Task<Uri> UploadAssetAsync(string fileName, byte[] content, string? contentType = null)
     {
         var containerClient = CreateContainerClient();
         var blobClient = containerClient.GetBlobClient(fileName);
         await blobClient.UploadAsync(new BinaryData(content));
+
+        if (contentType is not null)
+        {
+            var httpHeaders = new BlobHttpHeaders
+            {
+                ContentType = contentType
+            };
+            await blobClient.SetHttpHeadersAsync(httpHeaders);
+        }
+
         return blobClient.Uri;
     }
 

@@ -37,8 +37,8 @@ public class AssetsService
         }
 
         var fileContent = ExtractBytes(assetDto.Base64Content);
-        var blobName = GenerateBlobName(assetDto.FileName);
-        var blobUri = await _assetsBlobClient.UploadAssetAsync(blobName, fileContent);
+        var blobName = GenerateBlobName(assetDto.MimeType);
+        var blobUri = await _assetsBlobClient.UploadAssetAsync(blobName, fileContent, assetDto.MimeType);
 
         var asset = new ProductAsset
         {
@@ -69,7 +69,7 @@ public class AssetsService
         var assetToUpdate = await _context.ProductAssets.FindAsync(assetId);
         if (assetToUpdate is null)
         {
-            throw new NotFoundException($"Ассет идентификатором \"{assetId}\" не найден.");
+            throw new NotFoundException($"Ассет с идентификатором \"{assetId}\" не найден.");
         }
 
         if (assetDetailsDto.ProductId is not null)
@@ -80,6 +80,24 @@ public class AssetsService
         assetToUpdate.ProductId = assetDetailsDto.ProductId;
         _context.ProductAssets.Update(assetToUpdate);
         await _context.SaveChangesAsync();
+
+        if (assetToUpdate.FileName is not null && assetDetailsDto.ProductId is not null)
+        {
+            await _assetsBlobClient.SetAssetPropertyAsync(
+                assetToUpdate.FileName,
+                AssignedKey,
+                assetDetailsDto.ProductId.Value.ToString()
+            );
+        }
+
+        if (assetToUpdate.FileName is not null && assetDetailsDto.ProductId is null)
+        {
+            await _assetsBlobClient.SetAssetPropertyAsync(
+                assetToUpdate.FileName,
+                AssignedKey,
+                null
+            );
+        }
 
         return assetToUpdate;
     }
@@ -110,11 +128,15 @@ public class AssetsService
         }
     }
 
-    private static string GenerateBlobName(string sourceFileName)
+    private static string GenerateBlobName(string mimeType)
     {
+        if (!MimeTypesToFileExtMap.TryGetValue(mimeType, out var fileExt))
+        {
+            throw new CoreLogicException($"Файлы типа \"{mimeType}\" не поддерживаются.");
+        }
+
         var blobFileName = Guid.NewGuid().ToString().Replace("-", "");
-        var fileExt = Path.GetExtension(sourceFileName);
-        return $"{blobFileName}{fileExt}";
+        return $"{blobFileName}.{fileExt}";
     }
 
     private static byte[] ExtractBytes(string base64Content)
@@ -128,4 +150,17 @@ public class AssetsService
             throw new CoreLogicException(Base64ConversionError, e);
         }
     }
+
+    private static readonly Dictionary<string, string> MimeTypesToFileExtMap = new(StringComparer.OrdinalIgnoreCase)
+    {
+        {"image/avif", "avif"},
+        {"image/bmp", "bmp"},
+        {"image/vnd.microsoft.icon", "ico"},
+        {"image/jpeg", "jpeg"},
+        {"image/png", "png"},
+        {"image/xml+svg", "svg"},
+        {"image/tiff", "tiff"},
+        {"image/webp", "webp"},
+        {"image/gif", "gif"},
+    };
 }
