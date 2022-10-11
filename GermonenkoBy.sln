@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermonenkoBy.Products.Core.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermonenkoBy.Products.Infrastructure", "src\GermonenkoBy.Products.Infrastructure\GermonenkoBy.Products.Infrastructure.csproj", "{168A0292-013B-41B6-9F63-FC3D25484ECF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermonenkoBy.Common.HostedServices", "src\GermonenkoBy.Common.HostedServices\GermonenkoBy.Common.HostedServices.csproj", "{82C85903-8C04-4A26-9E02-F869CDA26157}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,7 @@ Global
 		{673221B6-7E17-4EE4-B632-E03304379E0D} = {329F2FB4-1E6B-41F9-B763-92012A366FBF}
 		{9DA52EC3-D2A3-4D85-ADAE-12B0802A0727} = {673221B6-7E17-4EE4-B632-E03304379E0D}
 		{168A0292-013B-41B6-9F63-FC3D25484ECF} = {2F67234A-40F9-45B1-8D33-72723394EFF0}
+		{82C85903-8C04-4A26-9E02-F869CDA26157} = {A0624CEA-EA49-4761-B71B-472530CC9B09}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BC710509-711B-4FD9-B335-45E24F98905C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -128,5 +131,9 @@ Global
 		{168A0292-013B-41B6-9F63-FC3D25484ECF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{168A0292-013B-41B6-9F63-FC3D25484ECF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{168A0292-013B-41B6-9F63-FC3D25484ECF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82C85903-8C04-4A26-9E02-F869CDA26157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82C85903-8C04-4A26-9E02-F869CDA26157}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82C85903-8C04-4A26-9E02-F869CDA26157}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82C85903-8C04-4A26-9E02-F869CDA26157}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
