@@ -31,6 +31,19 @@ public class AssetsController : ControllerBaseWrapper
         return OkWrapped(asset);
     }
 
+    [HttpPatch("{assetId:int}")]
+    [SwaggerResponse(200, "Updated asset details.", typeof(ContentResponse<ProductAsset>))]
+    [SwaggerResponse(400, "Validation error.", typeof(BaseResponse))]
+    [SwaggerResponse(404, "Asset not found error.", typeof(BaseResponse))]
+    public async Task<ActionResult<ContentResponse<ProductAsset>>> UpdateAssetDetailsAsync(
+        [SwaggerParameter("ID of an asset to be updated.")] int assetId,
+        [FromBody, SwaggerParameter("Asset data to update.")] ModifyAssetDetailsDto assetDetailsDto
+    )
+    {
+        var asset = await _assetsService.UpdateAssetDetailsAsync(assetId, assetDetailsDto);
+        return OkWrapped(asset);
+    }
+
     [HttpDelete("{assetId:int}")]
     [SwaggerResponse(204, "Success response.")]
     public async Task<NoContentResult> RemoveAssetAsync(

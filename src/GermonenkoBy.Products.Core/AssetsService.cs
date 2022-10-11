@@ -64,6 +64,26 @@ public class AssetsService
         return asset;
     }
 
+    public async Task<ProductAsset> UpdateAssetDetailsAsync(int assetId, ModifyAssetDetailsDto assetDetailsDto)
+    {
+        var assetToUpdate = await _context.ProductAssets.FindAsync(assetId);
+        if (assetToUpdate is null)
+        {
+            throw new NotFoundException($"Ассет идентификатором \"{assetId}\" не найден.");
+        }
+
+        if (assetDetailsDto.ProductId is not null)
+        {
+            await EnsureProductExists(assetDetailsDto.ProductId.Value);
+        }
+
+        assetToUpdate.ProductId = assetDetailsDto.ProductId;
+        _context.ProductAssets.Update(assetToUpdate);
+        await _context.SaveChangesAsync();
+
+        return assetToUpdate;
+    }
+
     public async Task DeleteAssetAsync(int assetId)
     {
         var asset = await _context.ProductAssets.FindAsync(assetId);
@@ -86,7 +106,7 @@ public class AssetsService
         var productExists = await _context.Products.AnyAsync(p => p.Id == productId);
         if (!productExists)
         {
-            throw new NotFoundException($"Товар и индентификатором \"{productId}\" не найден.");
+            throw new CoreLogicException($"Товар и индентификатором \"{productId}\" не найден.");
         }
     }
 
