@@ -46,8 +46,6 @@ public class ProductsService
 
     public async Task<Product> CreateProductAsync(CreateProductDto productDto)
     {
-        CoreValidationHelper.EnsureEntityIsValid(productDto);
-
         var productItemNumberIsInUse = await _context.Products.AnyAsync(p => p.ItemNumber == productDto.ItemNumber);
         if (productItemNumberIsInUse)
         {
@@ -87,8 +85,6 @@ public class ProductsService
 
     public async Task<Product> UpdateProductDetails(int productId, ModifyProductDto productDto)
     {
-        CoreValidationHelper.EnsureEntityIsValid(productDto);
-
         var productItemNumberIsInUse = await _context.Products.AnyAsync(
             p => p.ItemNumber == productDto.ItemNumber && p.Id != productId
         );
