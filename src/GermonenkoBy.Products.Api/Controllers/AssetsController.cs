@@ -19,6 +19,17 @@ public class AssetsController : ControllerBaseWrapper
         _assetsService = assetsService;
     }
 
+    [HttpGet("")]
+    [SwaggerResponse(200, "Uploaded product asset.", typeof(ContentListResponse<ProductAsset>))]
+    public async Task<ActionResult<ContentListResponse<ProductAsset>>> GetAssetsAsync(
+        [FromQuery, SwaggerParameter("Assets filter DTO.")] AssetsFilterDto filterDto,
+        [FromServices] AssetsSearchService searchService
+    )
+    {
+        var assets = await searchService.GetProductAssetsAsync(filterDto);
+        return OkWrappedPaged(assets);
+    }
+
     [HttpPost("")]
     [SwaggerResponse(200, "Uploaded product asset.", typeof(ContentResponse<ProductAsset>))]
     [SwaggerResponse(400, "Validation error.", typeof(BaseResponse))]
