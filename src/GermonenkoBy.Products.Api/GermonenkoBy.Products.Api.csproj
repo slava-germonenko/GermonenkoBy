@@ -5,20 +5,22 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <UserSecretsId>384d88da-e579-4e17-b1e8-5118acbe7c50</UserSecretsId>
+        <UserSecretsId>837280a6-5028-43c3-8366-0e154955ad70</UserSecretsId>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(RunConfiguration)' == 'Users API' " />
     <ItemGroup>
       <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.1.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
+      <PackageReference Include="Microsoft.Extensions.Azure" Version="1.5.0" />
       <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
       <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\GermonenkoBy.Common.HostedServices\GermonenkoBy.Common.HostedServices.csproj" />
       <ProjectReference Include="..\GermonenkoBy.Common.Web\GermonenkoBy.Common.Web.csproj" />
-      <ProjectReference Include="..\GermonenkoBy.Users.Core\GermonenkoBy.Users.Core.csproj" />
+      <ProjectReference Include="..\GermonenkoBy.Products.Core\GermonenkoBy.Products.Core.csproj" />
+      <ProjectReference Include="..\GermonenkoBy.Products.Infrastructure\GermonenkoBy.Products.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

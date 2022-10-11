@@ -6,7 +6,7 @@ namespace GermonenkoBy.Common.EntityFramework.Extensions;
 
 public static class QueryableExtensions
 {
-    public static async Task<PagedSet<TModel>> ToPagedSet<TModel>(
+    public static async Task<PagedSet<TModel>> ToPagedSetAsync<TModel>(
         this IQueryable<TModel> query,
         Paging paging
     )

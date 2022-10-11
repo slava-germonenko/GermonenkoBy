@@ -6,7 +6,7 @@ public class DevErrorResponse : BaseResponse
 
     public DevErrorResponse() { }
 
-    public DevErrorResponse(string message, string? stackTrace)
+    public DevErrorResponse(string message, string? stackTrace) : base(message)
     {
         StackTrace = stackTrace;
     }
