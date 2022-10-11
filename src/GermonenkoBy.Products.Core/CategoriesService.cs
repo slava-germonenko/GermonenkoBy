@@ -86,7 +86,7 @@ public class CategoriesService
             var assignToCategoryExists = await _context.Categories.AnyAsync(c => c.Id == assignTo.Value);
             if (!assignToCategoryExists)
             {
-                throw new NotFoundException($"Категория товаров с индентификатором \"{assignTo.Value}\" не найдена.");
+                throw new CoreLogicException($"Категория товаров с индентификатором \"{assignTo.Value}\" не найдена.");
             }
         }
 
