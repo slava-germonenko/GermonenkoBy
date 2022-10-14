@@ -29,7 +29,7 @@ public class ProductsController : ControllerBaseWrapper
     )
     {
         var products = await searchService.SearchProductsAsync(filterDto);
-        return OkWrappedPaged(products);
+        return OkWrapped(products);
     }
 
     [HttpPost("")]

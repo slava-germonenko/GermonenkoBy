@@ -26,13 +26,13 @@ public class ControllerBaseWrapper : ControllerBase
     }
 
     [NonAction]
-    public OkObjectResult OkWrappedPaged<TItem>(PagedSet<TItem> pagedSet)
+    public OkObjectResult OkWrapped<TItem>(PagedSet<TItem> pagedSet)
     {
         return Ok(new ContentListResponse<TItem>(pagedSet));
     }
 
     [NonAction]
-    public OkObjectResult OkWrappedPaged<TItem>(PagedSet<TItem> pagedSet, string message)
+    public OkObjectResult OkWrapped<TItem>(PagedSet<TItem> pagedSet, string message)
     {
         return Ok(new ContentListResponse<TItem>(pagedSet, message));
     }

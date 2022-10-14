@@ -37,7 +37,7 @@ public class UsersController : ControllerBaseWrapper
             Total = usersSet.Total,
             Data = userViewModels,
         };
-        return OkWrappedPaged(userViewModelsSet);
+        return OkWrapped(userViewModelsSet);
     }
 
     [HttpGet("{userId:int}")]
