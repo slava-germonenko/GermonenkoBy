@@ -19,6 +19,17 @@ public class UserSessionsController : ControllerBaseWrapper
         _userSessionsService = userSessionsService;
     }
 
+    [HttpGet("")]
+    [SwaggerResponse(200, "List of User Sessions.", typeof(ContentListResponse<UserSession>))]
+    public async Task<ActionResult<ContentListResponse<UserSession>>> GetUserSessionsAsync(
+        [FromQuery, SwaggerParameter("User Sessions Filter.")] FilterUserSessionsDto userSessionsFilter,
+        [FromServices] UserSessionsSearchService searchService
+    )
+    {
+        var sessions = await searchService.GetUserSessionsAsync(userSessionsFilter);
+        return OkWrapped(sessions);
+    }
+
     [HttpPut("")]
     [SwaggerResponse(200, "Started/Updated user session.", typeof(ContentResponse<UserSession>))]
     [SwaggerResponse(400, "Error response.", typeof(BaseResponse))]
@@ -32,7 +43,9 @@ public class UserSessionsController : ControllerBaseWrapper
 
     [HttpDelete("{sessionId:guid}")]
     [SwaggerResponse(204, "Success No Content Response.")]
-    public async Task<NoContentResult> TerminateSessionAsync(Guid sessionId)
+    public async Task<NoContentResult> TerminateSessionAsync(
+        [SwaggerParameter("Session ID to terminate.")] Guid sessionId
+    )
     {
         await _userSessionsService.TerminateSessionAsync(sessionId);
         return NoContent();

@@ -28,7 +28,7 @@ public class CategoriesController : ControllerBaseWrapper
     )
     {
         var categories = await searchService.SearchCategoriesAsync(filter);
-        return OkWrappedPaged(categories);
+        return OkWrapped(categories);
     }
 
     [HttpGet("{categoryId:int}")]

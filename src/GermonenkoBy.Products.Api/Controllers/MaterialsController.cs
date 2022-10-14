@@ -28,7 +28,7 @@ public class MaterialsController : ControllerBaseWrapper
     )
     {
         var categories = await searchService.SearchMaterialsAsync(filter);
-        return OkWrappedPaged(categories);
+        return OkWrapped(categories);
     }
 
     [HttpGet("{materialId:int}")]
