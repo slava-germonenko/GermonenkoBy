@@ -1,13 +1,12 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
-using Microsoft.Extensions.Options;
 
-using GermonenkoBy.Common.Utils.Hashing;
+using GermonenkoBy.Common.Web.Http;
 using GermonenkoBy.Common.Web.Middleware;
-using GermonenkoBy.Users.Api.Options;
-using GermonenkoBy.Users.Api.Services;
-using GermonenkoBy.Users.Core;
-using GermonenkoBy.Users.Core.Contracts;
+using GermonenkoBy.Sessions.Core;
+using GermonenkoBy.Sessions.Core.Repositories;
+using GermonenkoBy.Sessions.Infrastructure.Options;
+using GermonenkoBy.Sessions.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,41 +21,29 @@ if (!string.IsNullOrEmpty(appConfigConnectionString))
     });
 }
 
+builder.Services.Configure<RoutingOptions>(builder.Configuration.GetSection("Routing"));
+
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(options =>
 {
     options.EnableAnnotations();
     options.SwaggerDoc("v1", new()
     {
-        Title = "Users microservice"
+        Title = "Sessions Microservice"
     });
 });
 
 var connectionString = builder.Configuration.GetValue<string>("CoreDatabaseConnectionString");
-builder.Services.AddDbContext<UsersContext>(contextOptionsBuilder =>
+builder.Services.AddDbContext<SessionsContext>(options =>
 {
-    contextOptionsBuilder.UseSqlServer(connectionString);
+    options.UseSqlServer(connectionString);
 });
 
-builder.Services.Configure<SecurityOptions>(
-    builder.Configuration.GetSection("Security")
-);
-builder.Services.AddScoped<UsersSearchService>();
-builder.Services.AddScoped<UsersService>();
-builder.Services.AddScoped<IHasher, Pbkdf2Hasher>(services =>
-{
-    var options = services.GetRequiredService<IOptionsSnapshot<SecurityOptions>>();
-    return new Pbkdf2Hasher(options.Value);
-});
+builder.Services.AddHttpClient();
+builder.Services.AddTransient<HttpClientFacade>();
 
-if (builder.Environment.IsDevelopment())
-{
-    builder.Services.AddScoped<IPasswordPolicy, SimplePasswordPolicy>();
-}
-else
-{
-    builder.Services.AddScoped<IPasswordPolicy, StrongPasswordPolicy>();
-}
+builder.Services.AddScoped<UserSessionsService>();
+builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 
 var app = builder.Build();
 

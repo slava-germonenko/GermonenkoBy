@@ -28,7 +28,7 @@ public class UsersService
         var user = await _context.Users.FindAsync(id);
         if (user is null)
         {
-            throw new NotFoundException("Пользователь не найден.");
+            throw new NotFoundException($"Пользователь с идентификатором \"{id}\" не найден.");
         }
 
         return user;
