@@ -46,6 +46,16 @@ public class UserSessionsService
         return session;
     }
 
+    public async Task TerminateSessionAsync(Guid sessionId)
+    {
+        var session = await _context.UserSessions.FindAsync(sessionId);
+        if (session is not null)
+        {
+            _context.UserSessions.Remove(session);
+            await _context.SaveChangesAsync();
+        }
+    }
+
     private async Task EnsureUserExistsAsync(int userId)
     {
         try

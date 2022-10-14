@@ -1,10 +1,11 @@
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+
 using GermonenkoBy.Common.Web;
 using GermonenkoBy.Common.Web.Responses;
 using GermonenkoBy.Sessions.Core;
 using GermonenkoBy.Sessions.Core.Dtos;
 using GermonenkoBy.Sessions.Core.Models;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace GermonenkoBy.Sessions.Api.Controllers;
 
@@ -27,5 +28,13 @@ public class UserSessionsController : ControllerBaseWrapper
     {
         var session = await _userSessionsService.StartOrRefreshSessionAsync(sessionDto);
         return OkWrapped(session);
+    }
+
+    [HttpDelete("{sessionId:guid}")]
+    [SwaggerResponse(204, "Success No Content Response.")]
+    public async Task<NoContentResult> TerminateSessionAsync(Guid sessionId)
+    {
+        await _userSessionsService.TerminateSessionAsync(sessionId);
+        return NoContent();
     }
 }
