@@ -1,12 +1,14 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
+using GermonenkoBy.Common.HostedServices;
 using GermonenkoBy.Common.Web.Http;
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Sessions.Core;
 using GermonenkoBy.Sessions.Core.Repositories;
+using GermonenkoBy.Sessions.Core.Services;
 using GermonenkoBy.Sessions.Infrastructure.Options;
 using GermonenkoBy.Sessions.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +46,8 @@ builder.Services.AddTransient<HttpClientFacade>();
 
 builder.Services.AddScoped<UserSessionsService>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+
+builder.Services.RegisterHostedService<UserSessionsCleanupService>(TimeSpan.FromMinutes(5));
 
 var app = builder.Build();
 

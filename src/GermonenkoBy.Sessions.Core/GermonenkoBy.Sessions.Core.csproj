@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GermonenkoBy.Common.EntityFramework\GermonenkoBy.Common.EntityFramework.csproj" />
+      <ProjectReference Include="..\GermonenkoBy.Common.HostedServices\GermonenkoBy.Common.HostedServices.csproj" />
     </ItemGroup>
 
 </Project>

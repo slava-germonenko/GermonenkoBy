@@ -6,6 +6,7 @@ using GermonenkoBy.Common.Web.Responses;
 using GermonenkoBy.Sessions.Core;
 using GermonenkoBy.Sessions.Core.Dtos;
 using GermonenkoBy.Sessions.Core.Models;
+using GermonenkoBy.Sessions.Core.Services;
 
 namespace GermonenkoBy.Sessions.Api.Controllers;
 
