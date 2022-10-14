@@ -1,11 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+
 using GermonenkoBy.Common.Domain;
 using GermonenkoBy.Common.EntityFramework.Extensions;
 using GermonenkoBy.Sessions.Core.Dtos;
 using GermonenkoBy.Sessions.Core.Models;
 
-using Microsoft.EntityFrameworkCore;
-
-namespace GermonenkoBy.Sessions.Core;
+namespace GermonenkoBy.Sessions.Core.Services;
 
 public class UserSessionsSearchService
 {

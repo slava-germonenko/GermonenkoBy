@@ -5,7 +5,7 @@ using GermonenkoBy.Sessions.Core.Dtos;
 using GermonenkoBy.Sessions.Core.Models;
 using GermonenkoBy.Sessions.Core.Repositories;
 
-namespace GermonenkoBy.Sessions.Core;
+namespace GermonenkoBy.Sessions.Core.Services;
 
 public class UserSessionsService
 {
