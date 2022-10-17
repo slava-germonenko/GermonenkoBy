@@ -30,9 +30,10 @@ public class HttpClientFacade
     }
 
     public Task<TResponse> GetAsync<TResponse>(string route, IDictionary<string, string?>? queryParams = null)
-    {
-        return SendAsync<TResponse>(HttpMethod.Get, route, queryParams);
-    }
+        => SendAsync<TResponse>(HttpMethod.Get, route, queryParams);
+
+    public Task DeleteAsync(string route, IDictionary<string, string?>? queryParams = null)
+        => SendAsync(HttpMethod.Delete, route, queryParams);
 
     public async Task SendAsync(
         HttpMethod method,
@@ -72,7 +73,7 @@ public class HttpClientFacade
         var uriBuilder = new UriBuilder(route);
         if (queryParams is not null)
         {
-            QueryHelpers.AddQueryString(uriBuilder.Query, queryParams);
+            uriBuilder.Query = QueryHelpers.AddQueryString(string.Empty, queryParams);
         }
 
         var httpRequestMessage = new HttpRequestMessage(method, uriBuilder.Uri);
