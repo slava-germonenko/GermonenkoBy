@@ -44,6 +44,7 @@ builder.Services.AddDbContext<SessionsContext>(options =>
 builder.Services.AddHttpClient();
 builder.Services.AddTransient<HttpClientFacade>();
 
+builder.Services.AddScoped<UserSessionsSearchService>();
 builder.Services.AddScoped<UserSessionsService>();
 builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 

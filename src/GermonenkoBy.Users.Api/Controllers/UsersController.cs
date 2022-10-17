@@ -24,8 +24,9 @@ public class UsersController : ControllerBaseWrapper
     }
 
     [HttpGet("")]
+    [SwaggerResponse(200, "List of Users.", typeof(ContentListResponse<UserViewModel>))]
     public async Task<ActionResult<ContentListResponse<UserViewModel>>> GetUsersAsync(
-        [FromQuery] UsersFilterDto filter
+        [FromQuery, SwaggerParameter("Users Filter")] UsersFilterDto filter
     )
     {
         var usersSet = await _usersSearchService.SearchUsersListAsync(filter);

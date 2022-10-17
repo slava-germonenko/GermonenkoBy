@@ -53,7 +53,7 @@ public class UsersService
         var user = new User();
         user.CopyDetailsFrom(userDto);
 
-        (user.PasswordHash, user.PasswordHash) = _hasher.GetHash(userDto.Password);
+        (user.PasswordHash, user.PasswordSalt) = _hasher.GetHash(userDto.Password);
 
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
