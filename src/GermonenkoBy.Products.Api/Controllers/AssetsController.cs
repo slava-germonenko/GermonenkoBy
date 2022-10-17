@@ -27,7 +27,7 @@ public class AssetsController : ControllerBaseWrapper
     )
     {
         var assets = await searchService.GetProductAssetsAsync(filterDto);
-        return OkWrappedPaged(assets);
+        return OkWrapped(assets);
     }
 
     [HttpPost("")]

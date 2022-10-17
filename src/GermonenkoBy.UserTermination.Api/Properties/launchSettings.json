@@ -1,8 +1,9 @@
-{
+﻿{
   "profiles": {
-    "GermonenkoBy.Users.Api": {
+    "GermonenkoBy.UserTermination": {
       "commandName": "Project",
-      "applicationUrl": "http://localhost:5001",
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5004",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
