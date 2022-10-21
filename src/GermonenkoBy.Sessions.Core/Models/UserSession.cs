@@ -11,7 +11,7 @@ public class UserSession : IChangeDateTrackingModel
 
     public int UserId { get; set; }
 
-    public DateTime ExpireDate { get; set; }
+    public DateTime ExpireDate { get; set; } = DateTime.UtcNow;
 
     public Guid DeviceId { get; set; }
 
