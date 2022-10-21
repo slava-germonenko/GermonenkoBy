@@ -1,31 +1,22 @@
-using Microsoft.Extensions.Options;
-
 using GermonenkoBy.Common.Domain.Exceptions;
 using GermonenkoBy.Common.Web.Http;
 using GermonenkoBy.Common.Web.Responses;
 using GermonenkoBy.UserTermination.Core.Models;
 using GermonenkoBy.UserTermination.Core.Repositories;
-using GermonenkoBy.UserTermination.Infrastructure.Options;
 
-namespace GermonenkoBy.UserTermination.Infrastructure.Repositories;
+namespace GermonenkoBy.UserTermination.Infrastructure.Clients;
 
-public class UsersRepository : IUsersRepository
+public class UsersClient : IUsersClient
 {
+    public const string ClientName = "Users";
+
     private readonly HttpClientFacade _httpClient;
-
-    private readonly IOptionsSnapshot<RoutingOptions> _routingOptions;
-
-    private string UsersServiceUrl => _routingOptions.Value.UsersServiceUrl;
 
     private const string BasesRoute = "api/users";
 
-    public UsersRepository(
-        HttpClientFacade httpClient,
-        IOptionsSnapshot<RoutingOptions> routingOptions
-    )
+    public UsersClient(HttpClient httpClient)
     {
-        _httpClient = httpClient;
-        _routingOptions = routingOptions;
+        _httpClient = new HttpClientFacade(httpClient);
     }
 
     public async Task<User?> GetUserAsync(int userId)
@@ -48,5 +39,5 @@ public class UsersRepository : IUsersRepository
         return _httpClient.DeleteAsync(url);
     }
 
-    private string GetUserUrl(int userId) => $"{UsersServiceUrl}/{BasesRoute}/{userId}";
+    private static string GetUserUrl(int userId) => $"{BasesRoute}/{userId}";
 }

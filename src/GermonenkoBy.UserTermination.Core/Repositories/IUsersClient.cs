@@ -2,7 +2,7 @@ using GermonenkoBy.UserTermination.Core.Models;
 
 namespace GermonenkoBy.UserTermination.Core.Repositories;
 
-public interface IUsersRepository
+public interface IUsersClient
 {
     public Task<User?> GetUserAsync(int userId);
 
