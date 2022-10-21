@@ -42,13 +42,9 @@ public class HttpClientFacade
         object? body = null
     )
     {
-        var uriBuilder = new UriBuilder(route);
-        if (queryParams is not null)
-        {
-            QueryHelpers.AddQueryString(uriBuilder.Query, queryParams);
-        }
-
-        var httpRequestMessage = new HttpRequestMessage(method, uriBuilder.Uri);
+        var uriString = queryParams is null ? route : QueryHelpers.AddQueryString(route, queryParams);
+        var uri = new Uri(uriString, UriKind.RelativeOrAbsolute);
+        var httpRequestMessage = new HttpRequestMessage(method, uri);
 
         if (body is not null)
         {
@@ -70,13 +66,9 @@ public class HttpClientFacade
         object? body = null
     )
     {
-        var uriBuilder = new UriBuilder(route);
-        if (queryParams is not null)
-        {
-            uriBuilder.Query = QueryHelpers.AddQueryString(string.Empty, queryParams);
-        }
-
-        var httpRequestMessage = new HttpRequestMessage(method, uriBuilder.Uri);
+        var uriString = queryParams is null ? route : QueryHelpers.AddQueryString(route, queryParams);
+        var uri = new Uri(uriString, UriKind.RelativeOrAbsolute);
+        var httpRequestMessage = new HttpRequestMessage(method, uri);
 
         if (body is not null)
         {
