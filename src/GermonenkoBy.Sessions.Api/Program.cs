@@ -2,12 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 using GermonenkoBy.Common.HostedServices;
-using GermonenkoBy.Common.Web.Http;
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Sessions.Core;
 using GermonenkoBy.Sessions.Core.Repositories;
 using GermonenkoBy.Sessions.Core.Services;
-using GermonenkoBy.Sessions.Infrastructure.Options;
 using GermonenkoBy.Sessions.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,8 +20,6 @@ if (!string.IsNullOrEmpty(appConfigConnectionString))
             .Select(KeyFilter.Any, builder.Environment.EnvironmentName);
     });
 }
-
-builder.Services.Configure<RoutingOptions>(builder.Configuration.GetSection("Routing"));
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen(options =>
@@ -41,12 +37,17 @@ builder.Services.AddDbContext<SessionsContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-builder.Services.AddHttpClient();
-builder.Services.AddTransient<HttpClientFacade>();
+var usersServiceBaseAddress = builder.Configuration.GetValue<string>("Routing:UsersServiceUrl");
+builder.Services.AddHttpClient<IUsersClient, UsersClient>(
+    UsersClient.ClientName,
+    options =>
+    {
+        options.BaseAddress = new Uri(usersServiceBaseAddress);
+    }
+);
 
 builder.Services.AddScoped<UserSessionsSearchService>();
 builder.Services.AddScoped<UserSessionsService>();
-builder.Services.AddScoped<IUsersRepository, UsersRepository>();
 
 builder.Services.RegisterHostedService<UserSessionsCleanupService>(TimeSpan.FromMinutes(5));
 

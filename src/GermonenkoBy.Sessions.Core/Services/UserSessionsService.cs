@@ -9,13 +9,13 @@ namespace GermonenkoBy.Sessions.Core.Services;
 
 public class UserSessionsService
 {
-    private readonly IUsersRepository _repository;
+    private readonly IUsersClient _client;
 
     private readonly SessionsContext _context;
 
-    public UserSessionsService(IUsersRepository repository, SessionsContext context)
+    public UserSessionsService(IUsersClient client, SessionsContext context)
     {
-        _repository = repository;
+        _client = client;
         _context = context;
     }
 
@@ -60,7 +60,7 @@ public class UserSessionsService
     {
         try
         {
-            await _repository.GetUserAsync(userId);
+            await _client.GetUserAsync(userId);
         }
         catch (NotFoundException e)
         {
