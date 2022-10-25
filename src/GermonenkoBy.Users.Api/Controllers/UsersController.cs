@@ -85,4 +85,18 @@ public class UsersController : ControllerBaseWrapper
         await _usersService.RemoveUserAsync(userId);
         return NoContent();
     }
+
+    [HttpPost("{userId:int}/password-validation")]
+    [SwaggerResponse(204, "No Content message. If 204 is returned, then a passed password is valid")]
+    [SwaggerResponse(400, "Error message. If 400 is returned then password is invalid.")]
+    [SwaggerResponse(404, "User is not found.")]
+    public async Task<ActionResult> ValidatePasswordAsync(
+        [FromRoute] int userId,
+        [FromBody] ValidatePasswordRequest validateRequest,
+        [FromServices] PasswordValidationService validationService
+    )
+    {
+        var valid = await validationService.PasswordIsValidAsync(userId, validateRequest.Password);
+        return valid ? NoContent() : BadRequest(new BaseResponse("Неправильный пароль."));
+    }
 }
