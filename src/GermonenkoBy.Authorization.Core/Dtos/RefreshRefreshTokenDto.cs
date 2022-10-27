@@ -1,6 +1,6 @@
 namespace GermonenkoBy.Authorization.Core.Dtos;
 
-public class RefreshDto
+public class RefreshRefreshTokenDto
 {
     public string Token { get; set; }
 

@@ -37,4 +37,20 @@ public class HttpUserSessionsClient : IUserSessionsClient
         );
         return sessionsResponse.Data ?? throw new Exception("Произошла ошибка при попытке начать сессию.");
     }
+
+    public Task RemoveSessionAsync(Guid sessionId)
+    {
+        try
+        {
+            return _httpClient.DeleteAsync($"api/user-sessions/{sessionId}");
+        }
+        catch (NotFoundException)
+        {
+            return Task.CompletedTask;
+        }
+        catch (CoreLogicException)
+        {
+            return Task.CompletedTask;
+        }
+    }
 }

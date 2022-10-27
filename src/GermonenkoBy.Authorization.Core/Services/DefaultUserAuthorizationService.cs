@@ -76,10 +76,10 @@ public class DefaultUserAuthorizationService
         return refreshToken;
     }
 
-    public async Task<RefreshToken> RefreshRefreshTokenAsync(RefreshDto refreshDto)
+    public async Task<RefreshToken> RefreshRefreshTokenAsync(RefreshRefreshTokenDto refreshRefreshTokenDto)
     {
         var now = DateTime.UtcNow;
-        var refreshToken = await _context.RefreshTokens.FindAsync(refreshDto.Token);
+        var refreshToken = await _context.RefreshTokens.FindAsync(refreshRefreshTokenDto.Token);
         if (refreshToken is null || refreshToken.ExpireDate < now)
         {
             throw new CoreLogicException("Сессия не действительная.");
@@ -91,9 +91,9 @@ public class DefaultUserAuthorizationService
             throw new CoreLogicException("Данный токен не действетелен.");
         }
 
-        if (refreshDto.ExpireDate is not null)
+        if (refreshRefreshTokenDto.ExpireDate is not null)
         {
-            session.ExpireDate = refreshDto.ExpireDate.Value;
+            session.ExpireDate = refreshRefreshTokenDto.ExpireDate.Value;
         }
         else
         {
@@ -125,6 +125,19 @@ public class DefaultUserAuthorizationService
         await _context.SaveChangesAsync();
 
         return newRefreshToken;
+    }
+
+    public async Task TerminateSessionAsync(string token)
+    {
+        var refreshToken = await _context.RefreshTokens.FindAsync(token);
+        if (refreshToken is null)
+        {
+            return;
+        }
+
+        await RemoveSessionRelatedRefreshTokenAsync(refreshToken.UserSessionId);
+        await _context.SaveChangesAsync();
+        await _sessionsClient.RemoveSessionAsync(refreshToken.UserSessionId);
     }
 
     private async Task RemoveSessionRelatedRefreshTokenAsync(Guid sessionId)
