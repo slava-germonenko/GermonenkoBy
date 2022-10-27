@@ -1,10 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-using GermonenkoBy.Common.EntityFramework.Models;
-
 namespace GermonenkoBy.Authorization.Core.Models;
 
-public class RefreshToken : IChangeDateTrackingModel
+public class RefreshToken
 {
     [Key]
     [StringLength(400, ErrorMessage = "Максимальная длина токена – 400 символов.")]
@@ -13,8 +11,4 @@ public class RefreshToken : IChangeDateTrackingModel
     public Guid UserSessionId { get; set; }
 
     public DateTime ExpireDate { get; set; }
-
-    public DateTime CreatedDate { get; set; }
-
-    public DateTime? UpdatedDate { get; set; }
 }
