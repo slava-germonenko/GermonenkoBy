@@ -68,6 +68,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermonenkoBy.Authorization.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermonenkoBy.Authorization.Infrastructure", "src\GermonenkoBy.Authorization.Infrastructure\GermonenkoBy.Authorization.Infrastructure.csproj", "{A6CBBCFE-8E7E-47C3-98BD-7B686D0C6174}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GermonenkoBy.Authorization.Api", "src\GermonenkoBy.Authorization.Api\GermonenkoBy.Authorization.Api.csproj", "{97C74774-3314-4CD1-9445-3ACF160A5E95}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +108,7 @@ Global
 		{7227768A-0888-494D-A303-9F1750476BC9} = {1929F01D-5427-4D3C-9580-26BC0FD1E10C}
 		{423221D8-DFB8-4FFA-A75C-B510F11AB57A} = {7227768A-0888-494D-A303-9F1750476BC9}
 		{A6CBBCFE-8E7E-47C3-98BD-7B686D0C6174} = {7227768A-0888-494D-A303-9F1750476BC9}
+		{97C74774-3314-4CD1-9445-3ACF160A5E95} = {7227768A-0888-494D-A303-9F1750476BC9}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BC710509-711B-4FD9-B335-45E24F98905C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -200,5 +203,9 @@ Global
 		{A6CBBCFE-8E7E-47C3-98BD-7B686D0C6174}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6CBBCFE-8E7E-47C3-98BD-7B686D0C6174}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6CBBCFE-8E7E-47C3-98BD-7B686D0C6174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C74774-3314-4CD1-9445-3ACF160A5E95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C74774-3314-4CD1-9445-3ACF160A5E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C74774-3314-4CD1-9445-3ACF160A5E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C74774-3314-4CD1-9445-3ACF160A5E95}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

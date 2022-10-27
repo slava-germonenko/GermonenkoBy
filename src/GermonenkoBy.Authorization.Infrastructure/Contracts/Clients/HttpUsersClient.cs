@@ -19,7 +19,8 @@ public class HttpUsersClient : IUsersClient
     {
         var queryParams = new Dictionary<string, string?>
         {
-            { "emailAddress", emailAddress }
+            { "emailAddress", emailAddress },
+            { "count", "1" }
         };
         var users = await _httpClient.GetAsync<ContentListResponse<User>>("api/users", queryParams);
         return users.Data?.FirstOrDefault(u => u.EmailAddress == emailAddress);

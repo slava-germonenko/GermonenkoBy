@@ -8,7 +8,7 @@ using GermonenkoBy.Common.Domain.Exceptions;
 
 namespace GermonenkoBy.Authorization.Core.Services;
 
-public class AuthorizationService
+public class UserAuthorizationService
 {
     private readonly AuthorizationContext _context;
 
@@ -22,7 +22,7 @@ public class AuthorizationService
 
     private const string DefaultAuthErrorMessage = "Логин и/или пароль не верны.";
 
-    public AuthorizationService(
+    public UserAuthorizationService(
         AuthorizationContext context,
         IExpireDateGenerator expireDateGenerator,
         IRefreshTokenGenerator refreshTokenGenerator,

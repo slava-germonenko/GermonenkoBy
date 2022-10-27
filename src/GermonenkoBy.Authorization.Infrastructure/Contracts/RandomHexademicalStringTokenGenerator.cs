@@ -5,7 +5,7 @@ namespace GermonenkoBy.Authorization.Infrastructure.Contracts;
 
 public class RandomHexadecimalStringTokenGenerator : IRefreshTokenGenerator
 {
-    private const int RefreshTokenBytesLength = 16;
+    private const int RefreshTokenBytesLength = 32;
 
     public string GenerateRefreshToken()
     {
