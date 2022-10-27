@@ -41,6 +41,7 @@ builder.Services.AddDbContext<UsersContext>(contextOptionsBuilder =>
 builder.Services.Configure<SecurityOptions>(
     builder.Configuration.GetSection("Security")
 );
+builder.Services.AddScoped<PasswordValidationService>();
 builder.Services.AddScoped<UsersSearchService>();
 builder.Services.AddScoped<UsersService>();
 builder.Services.AddScoped<IHasher, Pbkdf2Hasher>(services =>
