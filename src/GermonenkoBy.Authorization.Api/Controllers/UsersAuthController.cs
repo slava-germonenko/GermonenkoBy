@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
+using GermonenkoBy.Authorization.Api.Dtos;
 using GermonenkoBy.Authorization.Core.Dtos;
 using GermonenkoBy.Authorization.Core.Models;
 using GermonenkoBy.Authorization.Core.Services;
@@ -36,10 +37,21 @@ public class AuthController : ControllerBaseWrapper
     [SwaggerResponse(200, "Refresh Token.", typeof(ContentResponse<RefreshToken>))]
     [SwaggerResponse(400, "Invalid token error.", typeof(BaseResponse))]
     public async Task<ActionResult<ContentResponse<RefreshToken>>> RefreshRefreshTokenAsync(
-        [FromBody, SwaggerParameter("Refresh Refresh Token DTO.")] RefreshDto refreshDto
+        [FromBody, SwaggerParameter("Refresh Refresh Token DTO.")] RefreshRefreshTokenDto refreshRefreshTokenDto
     )
     {
-        var refreshToken = await _authorizationService.RefreshRefreshTokenAsync(refreshDto);
+        var refreshToken = await _authorizationService.RefreshRefreshTokenAsync(refreshRefreshTokenDto);
         return OkWrapped(refreshToken);
+    }
+
+    [HttpPost("terminate")]
+    [SwaggerOperation("Terminate session and removes the token.")]
+    [SwaggerResponse(204, "Success No Content Response.")]
+    public async Task<NoContentResult> TerminateSessionAsync(
+        [FromBody, SwaggerParameter("Terminate Session Data.")] TerminateSessionDto terminateSessionDto
+    )
+    {
+        await _authorizationService.TerminateSessionAsync(terminateSessionDto.Token);
+        return NoContent();
     }
 }

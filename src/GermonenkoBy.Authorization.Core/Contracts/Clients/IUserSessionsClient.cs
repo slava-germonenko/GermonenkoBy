@@ -8,4 +8,6 @@ public interface IUserSessionsClient
     public Task<UserSession?> GetSessionAsync(Guid sessionId);
 
     public Task<UserSession> StartUserSessionAsync(StartUserSessionDto sessionDto);
+
+    public Task RemoveSessionAsync(Guid sessionId);
 }
