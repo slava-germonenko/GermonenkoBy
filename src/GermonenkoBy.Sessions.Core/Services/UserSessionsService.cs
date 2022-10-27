@@ -19,6 +19,13 @@ public class UserSessionsService
         _context = context;
     }
 
+    public async Task<UserSession> GetSessionAsync(Guid sessionId)
+    {
+        var session = await _context.UserSessions.FindAsync(sessionId)
+                      ?? throw new NotFoundException($"Сессия с идентификатором \"{sessionId}\" не найдена.");
+        return session;
+    }
+
     public async Task<UserSession> StartOrRefreshSessionAsync(StartUserSessionDto sessionDto)
     {
         var session = await _context.UserSessions.FirstOrDefaultAsync(

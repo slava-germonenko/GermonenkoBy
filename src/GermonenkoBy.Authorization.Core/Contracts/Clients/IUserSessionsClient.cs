@@ -5,5 +5,7 @@ namespace GermonenkoBy.Authorization.Core.Contracts.Clients;
 
 public interface IUserSessionsClient
 {
-    public Task<UserSessions> StartUserSessionAsync(StartUserSessionDto sessionDto);
+    public Task<UserSession?> GetSessionAsync(Guid sessionId);
+
+    public Task<UserSession> StartUserSessionAsync(StartUserSessionDto sessionDto);
 }

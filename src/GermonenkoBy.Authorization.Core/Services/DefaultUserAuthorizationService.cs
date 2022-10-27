@@ -8,7 +8,7 @@ using GermonenkoBy.Common.Domain.Exceptions;
 
 namespace GermonenkoBy.Authorization.Core.Services;
 
-public class UserAuthorizationService
+public class DefaultUserAuthorizationService
 {
     private readonly AuthorizationContext _context;
 
@@ -20,9 +20,11 @@ public class UserAuthorizationService
 
     private readonly IUserSessionsClient _sessionsClient;
 
+    private readonly TimeSpan _defaultSessionExtensionTime = TimeSpan.FromMinutes(5);
+
     private const string DefaultAuthErrorMessage = "Логин и/или пароль не верны.";
 
-    public UserAuthorizationService(
+    public DefaultUserAuthorizationService(
         AuthorizationContext context,
         IExpireDateGenerator expireDateGenerator,
         IRefreshTokenGenerator refreshTokenGenerator,
@@ -74,15 +76,66 @@ public class UserAuthorizationService
         return refreshToken;
     }
 
+    public async Task<RefreshToken> RefreshRefreshTokenAsync(RefreshDto refreshDto)
+    {
+        var now = DateTime.UtcNow;
+        var refreshToken = await _context.RefreshTokens.FindAsync(refreshDto.Token);
+        if (refreshToken is null || refreshToken.ExpireDate < now)
+        {
+            throw new CoreLogicException("Сессия не действительная.");
+        }
+
+        var session = await _sessionsClient.GetSessionAsync(refreshToken.UserSessionId);
+        if (session is null || session.ExpireDate < now)
+        {
+            throw new CoreLogicException("Данный токен не действетелен.");
+        }
+
+        if (refreshDto.ExpireDate is not null)
+        {
+            session.ExpireDate = refreshDto.ExpireDate.Value;
+        }
+        else
+        {
+            var tokenSoonToExpire = (now - session.ExpireDate).Duration() < _defaultSessionExtensionTime;
+            // Slightly extend expire date so the session is not terminated suddenly for the user.
+            if (tokenSoonToExpire)
+            {
+                session.ExpireDate = now.Add(_defaultSessionExtensionTime);
+            }
+        }
+
+        await _sessionsClient.StartUserSessionAsync(new()
+        {
+            UserId = session.UserId,
+            DeviceId = session.DeviceId,
+            DeviceName = session.DeviceName,
+            ExpireDate = session.ExpireDate
+        });
+
+        await RemoveSessionRelatedRefreshTokenAsync(session.Id);
+
+        var newRefreshToken = new RefreshToken
+        {
+            UserSessionId = session.Id,
+            ExpireDate = session.ExpireDate,
+            Token = _refreshTokenGenerator.GenerateRefreshToken()
+        };
+        _context.RefreshTokens.Add(newRefreshToken);
+        await _context.SaveChangesAsync();
+
+        return newRefreshToken;
+    }
+
     private async Task RemoveSessionRelatedRefreshTokenAsync(Guid sessionId)
     {
-        var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(
-            rf => rf.UserSessionId == sessionId
-        );
+        var refreshToken = await _context.RefreshTokens
+            .Where(rf => rf.UserSessionId == sessionId)
+            .ToListAsync();
 
-        if (refreshToken is not null)
+        if (refreshToken.Any())
         {
-            _context.RefreshTokens.Remove(refreshToken);
+            _context.RefreshTokens.RemoveRange(refreshToken);
         }
     }
 }

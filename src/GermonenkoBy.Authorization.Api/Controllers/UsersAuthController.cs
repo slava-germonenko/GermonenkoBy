@@ -12,9 +12,9 @@ namespace GermonenkoBy.Authorization.Api.Controllers;
 [ApiController, Route("api/users-auth")]
 public class AuthController : ControllerBaseWrapper
 {
-    private readonly UserAuthorizationService _authorizationService;
+    private readonly DefaultUserAuthorizationService _authorizationService;
 
-    public AuthController(UserAuthorizationService authorizationService)
+    public AuthController(DefaultUserAuthorizationService authorizationService)
     {
         _authorizationService = authorizationService;
     }
@@ -28,6 +28,18 @@ public class AuthController : ControllerBaseWrapper
     )
     {
         var refreshToken = await _authorizationService.AuthorizeAsync(authorizeDto);
+        return OkWrapped(refreshToken);
+    }
+
+    [HttpPost("refresh")]
+    [SwaggerOperation("Refresh the given refresh token (and session of needed).")]
+    [SwaggerResponse(200, "Refresh Token.", typeof(ContentResponse<RefreshToken>))]
+    [SwaggerResponse(400, "Invalid token error.", typeof(BaseResponse))]
+    public async Task<ActionResult<ContentResponse<RefreshToken>>> RefreshRefreshTokenAsync(
+        [FromBody, SwaggerParameter("Refresh Refresh Token DTO.")] RefreshDto refreshDto
+    )
+    {
+        var refreshToken = await _authorizationService.RefreshRefreshTokenAsync(refreshDto);
         return OkWrapped(refreshToken);
     }
 }

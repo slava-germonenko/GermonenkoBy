@@ -50,7 +50,7 @@ builder.Services.AddDbContext<AuthorizationContext>(options =>
     options.UseSqlServer(coreConnectionString);
 });
 
-builder.Services.AddScoped<UserAuthorizationService>();
+builder.Services.AddScoped<DefaultUserAuthorizationService>();
 builder.Services.AddScoped<IExpireDateGenerator, EndOfNextDayExpireDateGenerator>();
 builder.Services.AddScoped<IRefreshTokenGenerator, RandomHexadecimalStringTokenGenerator>();
 

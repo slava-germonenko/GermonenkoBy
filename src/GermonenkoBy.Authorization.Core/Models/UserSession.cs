@@ -1,6 +1,6 @@
 namespace GermonenkoBy.Authorization.Core.Models;
 
-public class UserSessions
+public class UserSession
 {
     public Guid Id { get; set; }
 
