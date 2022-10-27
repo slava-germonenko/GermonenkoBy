@@ -1,6 +1,7 @@
 using GermonenkoBy.Authorization.Core.Contracts.Clients;
 using GermonenkoBy.Authorization.Core.Dtos;
 using GermonenkoBy.Authorization.Core.Models;
+using GermonenkoBy.Common.Domain.Exceptions;
 using GermonenkoBy.Common.Web.Http;
 using GermonenkoBy.Common.Web.Responses;
 
@@ -15,9 +16,22 @@ public class HttpUserSessionsClient : IUserSessionsClient
         _httpClient = new HttpClientFacade(httpClient);
     }
 
-    public async Task<UserSessions> StartUserSessionAsync(StartUserSessionDto sessionDto)
+    public async Task<UserSession?> GetSessionAsync(Guid sessionId)
     {
-        var sessionsResponse = await _httpClient.PutAsync<ContentResponse<UserSessions>>(
+        try
+        {
+            var response = await _httpClient.GetAsync<ContentResponse<UserSession>>($"api/user-sessions/{sessionId}");
+            return response.Data;
+        }
+        catch (NotFoundException)
+        {
+            return null;
+        }
+    }
+
+    public async Task<UserSession> StartUserSessionAsync(StartUserSessionDto sessionDto)
+    {
+        var sessionsResponse = await _httpClient.PutAsync<ContentResponse<UserSession>>(
             "api/user-sessions",
             body: sessionDto
         );
