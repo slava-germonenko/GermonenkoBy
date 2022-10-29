@@ -19,10 +19,15 @@ public class UserSessionsService
         _context = context;
     }
 
+    public async Task<UserSession> GetSessionAsync(Guid sessionId)
+    {
+        var session = await _context.UserSessions.FindAsync(sessionId)
+                      ?? throw new NotFoundException($"Сессия с идентификатором \"{sessionId}\" не найдена.");
+        return session;
+    }
+
     public async Task<UserSession> StartOrRefreshSessionAsync(StartUserSessionDto sessionDto)
     {
-
-
         var session = await _context.UserSessions.FirstOrDefaultAsync(
             s => s.DeviceId == sessionDto.DeviceId && s.UserId == sessionDto.UserId
         );
@@ -38,6 +43,10 @@ public class UserSessionsService
             };
         }
 
+        if (session.ExpireDate > sessionDto.ExpireDate)
+        {
+            throw new CoreLogicException("Невозможно сократить время уже существующей действия сессии.");
+        }
         session.ExpireDate = sessionDto.ExpireDate;
 
         _context.UserSessions.Update(session);

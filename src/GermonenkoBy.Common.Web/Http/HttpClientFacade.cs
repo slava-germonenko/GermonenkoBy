@@ -32,6 +32,30 @@ public class HttpClientFacade
     public Task<TResponse> GetAsync<TResponse>(string route, IDictionary<string, string?>? queryParams = null)
         => SendAsync<TResponse>(HttpMethod.Get, route, queryParams);
 
+    public Task<TResponse> PostAsync<TResponse>(
+        string route,
+        IDictionary<string, string?>? queryParams = null,
+        object? body = null
+    ) => SendAsync<TResponse>(HttpMethod.Post, route, queryParams, body);
+
+    public Task PostAsync(
+        string route,
+        IDictionary<string, string?>? queryParams = null,
+        object? body = null
+    ) => SendAsync(HttpMethod.Post, route, queryParams, body);
+
+    public Task<TResponse> PutAsync<TResponse>(
+        string route,
+        IDictionary<string, string?>? queryParams = null,
+        object? body = null
+    ) => SendAsync<TResponse>(HttpMethod.Put, route, queryParams, body);
+
+    public Task PutAsync(
+        string route,
+        IDictionary<string, string?>? queryParams = null,
+        object? body = null
+    ) => SendAsync(HttpMethod.Put, route, queryParams, body);
+
     public Task DeleteAsync(string route, IDictionary<string, string?>? queryParams = null)
         => SendAsync(HttpMethod.Delete, route, queryParams);
 

@@ -25,6 +25,11 @@ public class UserSessionsSearchService
             query = query.Where(session => session.UserId == sessionsFilter.UserId);
         }
 
+        if (sessionsFilter.DeviceId is not null)
+        {
+            query = query.Where(session => session.DeviceId == sessionsFilter.DeviceId);
+        }
+
         return await query.OrderByDescending(session => session.ExpireDate).ToPagedSetAsync(sessionsFilter);
     }
 }

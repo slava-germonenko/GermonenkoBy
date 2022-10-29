@@ -3,7 +3,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 using GermonenkoBy.Common.Web;
 using GermonenkoBy.Common.Web.Responses;
-using GermonenkoBy.Sessions.Core;
 using GermonenkoBy.Sessions.Core.Dtos;
 using GermonenkoBy.Sessions.Core.Models;
 using GermonenkoBy.Sessions.Core.Services;
@@ -39,6 +38,18 @@ public class UserSessionsController : ControllerBaseWrapper
     )
     {
         var session = await _userSessionsService.StartOrRefreshSessionAsync(sessionDto);
+        return OkWrapped(session);
+    }
+
+    [HttpGet("{sessionId:guid}")]
+    [SwaggerOperation("Search for the session by the given ID.")]
+    [SwaggerResponse(200, "Found Session.", typeof(ContentResponse<UserSession>))]
+    [SwaggerResponse(404, "Not Found Error.", typeof(BaseResponse))]
+    public async Task<ActionResult<ContentResponse<UserSession>>> GetSessionAsync(
+        [SwaggerParameter("ID of a session to search for.")] Guid sessionId
+    )
+    {
+        var session = await _userSessionsService.GetSessionAsync(sessionId);
         return OkWrapped(session);
     }
 
