@@ -12,7 +12,8 @@
 **/*.dbmdl
 **/*.jfm
 **/azds.yaml
-**/bin
+# Uncomment for build inside docker
+# **/bin
 **/charts
 **/docker-compose*
 **/Dockerfile*
