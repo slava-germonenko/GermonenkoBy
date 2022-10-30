@@ -1,0 +1,55 @@
+# DEV docker compose file
+
+version: "3.9"
+
+services:
+  auth:
+    image: "germonenko.by/auth"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      AppConfigConnectionString: ${AppConfigConnectionString}
+    build:
+      context: "./src/GermonenkoBy.Authorization.Api"
+      dockerfile: "host-build.Dockerfile"
+    ports:
+      - "5005:80"
+  products:
+    image: "germonenko.by/products"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      AppConfigConnectionString: ${AppConfigConnectionString}
+    build:
+      context: "./src/GermonenkoBy.Products.Api"
+      dockerfile: "host-build.Dockerfile"
+    ports:
+      - "5002:80"
+  sessions:
+    image: "germonenko.by/sessions"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      AppConfigConnectionString: ${AppConfigConnectionString}
+    build:
+      context: "./src/GermonenkoBy.Sessions.Api"
+      dockerfile: "host-build.Dockerfile"
+    ports:
+      - "5003:80"
+  users:
+    image: "germonenko.by/users"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      AppConfigConnectionString: ${AppConfigConnectionString}
+    build:
+      context: "./src/GermonenkoBy.Users.Api"
+      dockerfile: "host-build.Dockerfile"
+    ports:
+      - "5001:80"
+  user-termination:
+    image: "germonenko.by/user-termination"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      AppConfigConnectionString: ${AppConfigConnectionString}
+    build:
+      context: "./src/GermonenkoBy.UserTermination.Api"
+      dockerfile: "host-build.Dockerfile"
+    ports:
+      - "5004:80"

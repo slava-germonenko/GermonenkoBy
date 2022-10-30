@@ -21,4 +21,10 @@
       <ProjectReference Include="..\GermonenkoBy.Sessions.Infrastructure\GermonenkoBy.Sessions.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update=".dockerignore">
+        <DependentUpon>host-build.Dockerfile</DependentUpon>
+      </None>
+    </ItemGroup>
+
 </Project>
