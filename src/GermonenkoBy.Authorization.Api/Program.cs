@@ -7,6 +7,7 @@ using GermonenkoBy.Authorization.Core.Contracts.Clients;
 using GermonenkoBy.Authorization.Core.Services;
 using GermonenkoBy.Authorization.Infrastructure.Contracts;
 using GermonenkoBy.Authorization.Infrastructure.Contracts.Clients;
+using GermonenkoBy.Common.HostedServices;
 using GermonenkoBy.Common.Web.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -53,6 +54,8 @@ builder.Services.AddDbContext<AuthorizationContext>(options =>
 builder.Services.AddScoped<DefaultUserAuthorizationService>();
 builder.Services.AddScoped<IExpireDateGenerator, EndOfNextDayExpireDateGenerator>();
 builder.Services.AddScoped<IRefreshTokenGenerator, RandomHexadecimalStringTokenGenerator>();
+
+builder.Services.RegisterHostedService<RefreshTokensCleanupService>(TimeSpan.FromMinutes(10));
 
 var app = builder.Build();
 
