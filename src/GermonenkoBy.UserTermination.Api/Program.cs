@@ -68,7 +68,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapDelete("api/user/{userId:int}",
-    [SwaggerOperation("Terminates User with The given ID")]
+    [SwaggerOperation("Terminate user.", "Removes all user associated items and terminates a user.")]
     [SwaggerResponse(204, "No Content Success Response")]
     async (
         [FromRoute, SwaggerParameter("ID of a user to be terminated.")] int userId,

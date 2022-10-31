@@ -20,6 +20,7 @@ public class UserSessionsController : ControllerBaseWrapper
     }
 
     [HttpGet("")]
+    [SwaggerOperation("User sessions search.", "Search for user sessions using filters provided via query params.")]
     [SwaggerResponse(200, "List of User Sessions.", typeof(ContentListResponse<UserSession>))]
     public async Task<ActionResult<ContentListResponse<UserSession>>> GetUserSessionsAsync(
         [FromQuery, SwaggerParameter("User Sessions Filter.")] FilterUserSessionsDto userSessionsFilter,
@@ -31,10 +32,11 @@ public class UserSessionsController : ControllerBaseWrapper
     }
 
     [HttpPut("")]
+    [SwaggerOperation("Start/update user session.", "Starts a new user session. If user session is already started, it will be updated it.")]
     [SwaggerResponse(200, "Started/Updated user session.", typeof(ContentResponse<UserSession>))]
     [SwaggerResponse(400, "Error response.", typeof(BaseResponse))]
     public async Task<ActionResult<ContentResponse<UserSession>>> StartOrRefreshSession(
-        [FromBody, SwaggerParameter("User Session Data.")] StartUserSessionDto sessionDto
+        [FromBody, SwaggerRequestBody("User Session Data.")] StartUserSessionDto sessionDto
     )
     {
         var session = await _userSessionsService.StartOrRefreshSessionAsync(sessionDto);
@@ -42,7 +44,7 @@ public class UserSessionsController : ControllerBaseWrapper
     }
 
     [HttpGet("{sessionId:guid}")]
-    [SwaggerOperation("Search for the session by the given ID.")]
+    [SwaggerOperation("Get user session.", "Tries to get user session by ID.")]
     [SwaggerResponse(200, "Found Session.", typeof(ContentResponse<UserSession>))]
     [SwaggerResponse(404, "Not Found Error.", typeof(BaseResponse))]
     public async Task<ActionResult<ContentResponse<UserSession>>> GetSessionAsync(
@@ -54,6 +56,7 @@ public class UserSessionsController : ControllerBaseWrapper
     }
 
     [HttpDelete("{sessionId:guid}")]
+    [SwaggerOperation("Remove session.", "Removes session with the given ID.")]
     [SwaggerResponse(204, "Success No Content Response.")]
     public async Task<NoContentResult> TerminateSessionAsync(
         [SwaggerParameter("Session ID to terminate.")] Guid sessionId

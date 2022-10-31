@@ -21,6 +21,7 @@ public class CategoriesController : ControllerBaseWrapper
     }
 
     [HttpGet("")]
+    [SwaggerOperation("Categories search.", "Search for categories using filters provided via query params.")]
     [SwaggerResponse(200, "List of categories", typeof(ContentListResponse<Category>), ContentTypes.Json)]
     public async Task<ActionResult<ContentListResponse<Category>>> GetCategoriesAsync(
         [SwaggerParameter("Category filter."), FromQuery] CategoriesFilterDto filter,
@@ -32,6 +33,7 @@ public class CategoriesController : ControllerBaseWrapper
     }
 
     [HttpGet("{categoryId:int}")]
+    [SwaggerOperation("Get category by ID", "Tries to retrieve category with the provided ID.")]
     [SwaggerResponse(200, "Category found by ID.", typeof(ContentResponse<Category>), ContentTypes.Json)]
     [SwaggerResponse(404, "Not found error.", typeof(BaseResponse), ContentTypes.Json)]
     public async Task<ActionResult<ContentResponse<Category>>> GetCategoryAsync(
@@ -43,10 +45,11 @@ public class CategoriesController : ControllerBaseWrapper
     }
 
     [HttpPost("")]
+    [SwaggerOperation("Create category.", "Creates new category with the data provided in the body.")]
     [SwaggerResponse(200, "Saved Category object.", typeof(ContentResponse<Category>), ContentTypes.Json)]
     [SwaggerResponse(400, "Validation error.", typeof(BaseResponse), ContentTypes.Json)]
     public async Task<ActionResult<Category>> CreateCategoryAsync(
-        [FromBody, SwaggerParameter("New category DTO.")] SaveCategoryDto categoryDto
+        [FromBody, SwaggerRequestBody("New category DTO.")] SaveCategoryDto categoryDto
     )
     {
         var category = await _categoriesService.CreateCategoryAsync(categoryDto);
@@ -54,11 +57,12 @@ public class CategoriesController : ControllerBaseWrapper
     }
 
     [HttpPatch("{categoryId:int}")]
+    [SwaggerOperation("Update category.", "Updates category with the data provided in the body.")]
     [SwaggerResponse(200, "Saved Category object.", typeof(ContentResponse<Category>), ContentTypes.Json)]
     [SwaggerResponse(400, "Validation error.", typeof(BaseResponse), ContentTypes.Json)]
     public async Task<ActionResult<Category>> UpdateCategoryAsync(
         [SwaggerParameter("ID of a category to be updated")] int categoryId,
-        [FromBody, SwaggerParameter("Category's data to be updated.")] SaveCategoryDto categoryDto
+        [FromBody, SwaggerRequestBody("Category's data to be updated.")] SaveCategoryDto categoryDto
     )
     {
         var category = await _categoriesService.UpdateCategoryAsync(categoryId, categoryDto);
@@ -66,6 +70,7 @@ public class CategoriesController : ControllerBaseWrapper
     }
 
     [HttpDelete("{categoryId:int}")]
+    [SwaggerOperation("Remove category.", "Removes a category with the given ID.")]
     [SwaggerResponse(204, contentTypes: ContentTypes.Json)]
     public async Task<NoContentResult> RemoveCategoryAsync(
         [SwaggerParameter("ID of a category to be removed.")] int categoryId,
