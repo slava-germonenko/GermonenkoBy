@@ -22,6 +22,7 @@ public class ProductsController : ControllerBaseWrapper
     }
 
     [HttpGet("")]
+    [SwaggerOperation("Products search.", "Search for products using filters provided via query params.")]
     [SwaggerResponse(200, "List of products.", typeof(ContentListResponse<Product>), ContentTypes.Json)]
     public async Task<ActionResult<ContentListResponse<Product>>> GetProductsAsync(
         [FromQuery, SwaggerParameter("Products filter.")] ProductsFilterDto filterDto,
@@ -33,10 +34,11 @@ public class ProductsController : ControllerBaseWrapper
     }
 
     [HttpPost("")]
+    [SwaggerOperation("Create product.", "Creates new product with the data provided in the body.")]
     [SwaggerResponse(200, "Created Product.", typeof(ContentResponse<Product>), ContentTypes.Json)]
     [SwaggerResponse(400, "Validation error.", typeof(BaseResponse), ContentTypes.Json)]
     public async Task<ActionResult<ContentResponse<Product>>> CreateProductAsync(
-        [FromBody, SwaggerParameter("Product DTO.")] CreateProductDto productDto
+        [FromBody, SwaggerRequestBody("Product DTO.")] CreateProductDto productDto
     )
     {
         var product = await _productsService.CreateProductAsync(productDto);
@@ -44,21 +46,25 @@ public class ProductsController : ControllerBaseWrapper
     }
 
     [HttpGet("{productId:int}")]
+    [SwaggerOperation("Get product by ID", "Tries to retrieve product with the provided ID.")]
     [SwaggerResponse(200, "Product found by ID.", typeof(ContentResponse<Product>), ContentTypes.Json)]
     [SwaggerResponse(400, "Not found error.", typeof(BaseResponse), ContentTypes.Json)]
-    public async Task<ActionResult<ContentResponse<Product>>> GetProductAsync(int productId)
+    public async Task<ActionResult<ContentResponse<Product>>> GetProductAsync(
+        [SwaggerParameter("ID of a product to get.")] int productId
+    )
     {
         var product = await _productsService.GetProductAsync(productId);
         return OkWrapped(product);
     }
 
     [HttpPatch("{productId:int}")]
+    [SwaggerOperation("Update product.", "Updates product with the data supplied in the request body.")]
     [SwaggerResponse(200, "Updated Product.", typeof(ContentResponse<Product>), ContentTypes.Json)]
     [SwaggerResponse(400, "Validation error.", typeof(BaseResponse), ContentTypes.Json)]
     [SwaggerResponse(404, "Not found error.", typeof(BaseResponse), ContentTypes.Json)]
     public async Task<ActionResult<ContentResponse<Product>>> UpdateProductAsync(
         [SwaggerParameter("ID of a product to be updated.")] int productId,
-        [FromBody, SwaggerParameter("Product DTO.")] ModifyProductDto productDto
+        [FromBody, SwaggerRequestBody("Product DTO.")] ModifyProductDto productDto
     )
     {
         var product = await _productsService.UpdateProductDetails(productId, productDto);
@@ -66,6 +72,7 @@ public class ProductsController : ControllerBaseWrapper
     }
 
     [HttpDelete("{productId:int}")]
+    [SwaggerOperation("Remove product.", "Removes product with the given ID.")]
     [SwaggerResponse(204, "Success response.")]
     public async Task<NoContentResult> RemoveProductAsync(int productId)
     {
@@ -74,11 +81,12 @@ public class ProductsController : ControllerBaseWrapper
     }
 
     [HttpPut("{productId:int}/prices")]
+    [SwaggerOperation("Set product prices.", "Sets (overwrites) prices assigned to a product.")]
     [SwaggerResponse(200, "Updated product.", typeof(ContentResponse<Product>), ContentTypes.Json)]
     [SwaggerResponse(404, "Not found error.", typeof(BaseResponse), ContentTypes.Json)]
     public async Task<ActionResult<ContentResponse<Product>>> SetProductPricesAsync(
         [SwaggerParameter("Product ID to updated.")] int productId,
-        [FromBody, SwaggerParameter("Product prices to be st.")] SetProductPricesDto pricesDto
+        [FromBody, SwaggerRequestBody("Product prices to be st.")] SetProductPricesDto pricesDto
     )
     {
         var product = await _productsService.SetProductPricesAsync(productId, pricesDto.ProductPrices);

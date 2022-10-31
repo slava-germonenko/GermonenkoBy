@@ -21,11 +21,14 @@ public class AuthController : ControllerBaseWrapper
     }
 
     [HttpPost("")]
-    [SwaggerOperation("Authorizes user by login and password.")]
+    [SwaggerOperation(
+        "Authorize by login and password",
+        "Performs user authorization based on provided login and password. Created refresh token and/or session."
+    )]
     [SwaggerResponse(200, "Refresh Token.", typeof(ContentResponse<RefreshToken>))]
     [SwaggerResponse(400, "Invalid login/password error", typeof(BaseResponse))]
     public async Task<ActionResult<ContentResponse<RefreshToken>>> AuthorizeAsync(
-        [FromBody, SwaggerParameter("Authorization Request")] AuthorizeDto authorizeDto
+        [FromBody, SwaggerRequestBody("Authorization Request")] AuthorizeDto authorizeDto
     )
     {
         var refreshToken = await _authorizationService.AuthorizeAsync(authorizeDto);
@@ -33,11 +36,11 @@ public class AuthController : ControllerBaseWrapper
     }
 
     [HttpPost("refresh")]
-    [SwaggerOperation("Refresh the given refresh token (and session of needed).")]
+    [SwaggerOperation("Refresh refresh token", "Refreshes given refresh token and session (if needed).")]
     [SwaggerResponse(200, "Refresh Token.", typeof(ContentResponse<RefreshToken>))]
     [SwaggerResponse(400, "Invalid token error.", typeof(BaseResponse))]
     public async Task<ActionResult<ContentResponse<RefreshToken>>> RefreshRefreshTokenAsync(
-        [FromBody, SwaggerParameter("Refresh Refresh Token DTO.")] RefreshRefreshTokenDto refreshRefreshTokenDto
+        [FromBody, SwaggerRequestBody("Refresh Refresh Token DTO.")] RefreshRefreshTokenDto refreshRefreshTokenDto
     )
     {
         var refreshToken = await _authorizationService.RefreshRefreshTokenAsync(refreshRefreshTokenDto);
@@ -45,10 +48,10 @@ public class AuthController : ControllerBaseWrapper
     }
 
     [HttpPost("terminate")]
-    [SwaggerOperation("Terminate session and removes the token.")]
+    [SwaggerOperation("Terminates session.", "Removes given token and terminates corresponding session.")]
     [SwaggerResponse(204, "Success No Content Response.")]
     public async Task<NoContentResult> TerminateSessionAsync(
-        [FromBody, SwaggerParameter("Terminate Session Data.")] TerminateSessionDto terminateSessionDto
+        [FromBody, SwaggerRequestBody("Terminate Session Data.")] TerminateSessionDto terminateSessionDto
     )
     {
         await _authorizationService.TerminateSessionAsync(terminateSessionDto.Token);

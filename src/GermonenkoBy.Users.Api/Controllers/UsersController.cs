@@ -24,6 +24,7 @@ public class UsersController : ControllerBaseWrapper
     }
 
     [HttpGet("")]
+    [SwaggerOperation("Search users.", "Search for users using filters provided via query params.")]
     [SwaggerResponse(200, "List of Users.", typeof(ContentListResponse<UserViewModel>))]
     public async Task<ActionResult<ContentListResponse<UserViewModel>>> GetUsersAsync(
         [FromQuery, SwaggerParameter("Users Filter")] UsersFilterDto filter
@@ -42,7 +43,7 @@ public class UsersController : ControllerBaseWrapper
     }
 
     [HttpGet("{userId:int}")]
-    [SwaggerOperation("Gets user by ID")]
+    [SwaggerOperation("Get user.", "Tries to get uer by the given ID.")]
     [SwaggerResponse(200, "Instance the user.", typeof(ContentResponse<UserViewModel>), "application/json")]
     [SwaggerResponse(404, "Not found error.", typeof(BaseResponse), "application/json")]
     public async Task<ActionResult<ContentResponse<UserViewModel>>> GetUserAsync(
@@ -54,10 +55,11 @@ public class UsersController : ControllerBaseWrapper
     }
 
     [HttpPost("")]
+    [SwaggerOperation("Create user.", "Creates new product with the data provided in the body.")]
     [SwaggerResponse(200, "Instance of the updated user.", typeof(ContentResponse<UserViewModel>), "application/json")]
     [SwaggerResponse(400, "Bad request error.", typeof(BaseResponse), "application/json")]
     public async Task<ActionResult<ContentResponse<UserViewModel>>> CreateUserAsync(
-        [SwaggerRequestBody("User model to add.")] CreateUserDto userDto
+        [FromBody, SwaggerRequestBody("User model to add.")] CreateUserDto userDto
     )
     {
         var user = await _usersService.CreateUserAsync(userDto);
@@ -65,6 +67,7 @@ public class UsersController : ControllerBaseWrapper
     }
 
     [HttpPatch("{userId:int}")]
+    [SwaggerOperation("Update user.", "Updates user with the data supplied in the request body.")]
     [SwaggerResponse(200, "Instance of the updated user.", typeof(ContentResponse<UserViewModel>), "application/json")]
     [SwaggerResponse(400, "Bad request error.", typeof(BaseResponse), "application/json")]
     [SwaggerResponse(404, "Not found error.", typeof(BaseResponse), "application/json")]
@@ -78,21 +81,28 @@ public class UsersController : ControllerBaseWrapper
     }
 
     [HttpDelete("{userId:int}")]
+    [SwaggerOperation("Remove user.", "Hard deletes user with the given ID.")]
     [SwaggerResponse(204, "No content message that signals that user was successfully deleted.")]
     [SwaggerResponse(400, "Not found error.", typeof(BaseResponse), "application/json")]
-    public async Task<NoContentResult> RemoveUserAsync(int userId)
+    public async Task<NoContentResult> RemoveUserAsync(
+        [SwaggerParameter("ID of a user to be removed.")] int userId
+    )
     {
         await _usersService.RemoveUserAsync(userId);
         return NoContent();
     }
 
     [HttpPost("{userId:int}/password-validation")]
+    [SwaggerOperation(
+        "Validate user password.",
+        "Checks if hash of the password provided in the body matches user's password hash."
+    )]
     [SwaggerResponse(204, "No Content message. If 204 is returned, then a passed password is valid")]
     [SwaggerResponse(400, "Error message. If 400 is returned then password is invalid.")]
     [SwaggerResponse(404, "User is not found.")]
     public async Task<ActionResult> ValidatePasswordAsync(
-        [FromRoute] int userId,
-        [FromBody] ValidatePasswordRequest validateRequest,
+        [FromRoute, SwaggerParameter("ID of a user whose password should be validated.")] int userId,
+        [FromBody, SwaggerRequestBody("Password to validate.")] ValidatePasswordRequest validateRequest,
         [FromServices] PasswordValidationService validationService
     )
     {

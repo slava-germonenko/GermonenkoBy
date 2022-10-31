@@ -21,7 +21,8 @@ public class MaterialsController : ControllerBaseWrapper
     }
 
     [HttpGet("")]
-    [SwaggerResponse(200, "List of categories", typeof(ContentListResponse<Material>), ContentTypes.Json)]
+    [SwaggerOperation("Material search.", "Search for materials using filters provided via query params.")]
+    [SwaggerResponse(200, "List of materials.", typeof(ContentListResponse<Material>), ContentTypes.Json)]
     public async Task<ActionResult<ContentListResponse<Material>>> GetCategoriesAsync(
         [SwaggerParameter("material filter."), FromQuery] MaterialsFilterDto filter,
         [FromServices] MaterialsSearchService searchService
@@ -32,6 +33,7 @@ public class MaterialsController : ControllerBaseWrapper
     }
 
     [HttpGet("{materialId:int}")]
+    [SwaggerOperation("Get material by ID", "Tries to retrieve material with the provided ID.")]
     [SwaggerResponse(200, "Material found by ID.", typeof(ContentResponse<Material>), ContentTypes.Json)]
     [SwaggerResponse(404, "Not found error.", typeof(BaseResponse), ContentTypes.Json)]
     public async Task<ActionResult<ContentResponse<Material>>> GetMaterialAsync(
@@ -43,10 +45,11 @@ public class MaterialsController : ControllerBaseWrapper
     }
 
     [HttpPost("")]
+    [SwaggerOperation("Create material.", "Creates new material with the data provided in the body.")]
     [SwaggerResponse(200, "Saved material object.", typeof(ContentResponse<Material>), ContentTypes.Json)]
     [SwaggerResponse(400, "Validation error.", typeof(BaseResponse), ContentTypes.Json)]
     public async Task<ActionResult<Material>> CreateMaterialAsync(
-        [FromBody, SwaggerParameter("New material DTO.")] SaveMaterialDto materialDto
+        [FromBody, SwaggerRequestBody("New material DTO.")] SaveMaterialDto materialDto
     )
     {
         var material = await _materialsService.CreateMaterialAsync(materialDto);
@@ -54,11 +57,12 @@ public class MaterialsController : ControllerBaseWrapper
     }
 
     [HttpPatch("{materialId:int}")]
+    [SwaggerOperation("Update material.", "Updates material with the data supplied in the request body.")]
     [SwaggerResponse(200, "Saved material object.", typeof(ContentResponse<Material>), ContentTypes.Json)]
     [SwaggerResponse(400, "Validation error.", typeof(BaseResponse), ContentTypes.Json)]
     public async Task<ActionResult<Material>> UpdateMaterialAsync(
         [SwaggerParameter("ID of a material to be updated")] int materialId,
-        [FromBody, SwaggerParameter("material's data to be updated.")] SaveMaterialDto materialDto
+        [FromBody, SwaggerRequestBody("material's data to be updated.")] SaveMaterialDto materialDto
     )
     {
         var material = await _materialsService.UpdateMaterialAsync(materialId, materialDto);
@@ -66,6 +70,7 @@ public class MaterialsController : ControllerBaseWrapper
     }
 
     [HttpDelete("{materialId:int}")]
+    [SwaggerOperation("Remove material.", "Removes material with the given ID.")]
     [SwaggerResponse(204, contentTypes: ContentTypes.Json)]
     public async Task<NoContentResult> RemoveMaterialAsync(
         [SwaggerParameter("ID of a material to be removed.")] int materialId

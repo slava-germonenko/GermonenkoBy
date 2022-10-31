@@ -20,6 +20,7 @@ public class AssetsController : ControllerBaseWrapper
     }
 
     [HttpGet("")]
+    [SwaggerOperation("Search product assets.", "Searches assets using filter parameters provided via query.")]
     [SwaggerResponse(200, "Uploaded product asset.", typeof(ContentListResponse<ProductAsset>))]
     public async Task<ActionResult<ContentListResponse<ProductAsset>>> GetAssetsAsync(
         [FromQuery, SwaggerParameter("Assets filter DTO.")] AssetsFilterDto filterDto,
@@ -31,11 +32,12 @@ public class AssetsController : ControllerBaseWrapper
     }
 
     [HttpPost("")]
+    [SwaggerOperation("Upload new asset.", "Uploads new asset and returns uploaded asset descriptor.")]
     [SwaggerResponse(200, "Uploaded product asset.", typeof(ContentResponse<ProductAsset>))]
     [SwaggerResponse(400, "Validation error.", typeof(BaseResponse))]
     [SwaggerResponse(404, "Not found error.", typeof(BaseResponse))]
     public async Task<ActionResult<ContentResponse<ProductAsset>>> UploadAssetAsync(
-        [FromBody, SwaggerParameter("Asset DTO to be uploaded.")] UploadAssetDto assetDto
+        [FromBody, SwaggerRequestBody("Asset DTO to be uploaded.")] UploadAssetDto assetDto
     )
     {
         var asset = await _assetsService.UploadAssetAsync(assetDto);
@@ -43,12 +45,13 @@ public class AssetsController : ControllerBaseWrapper
     }
 
     [HttpPatch("{assetId:int}")]
+    [SwaggerOperation("Update asset's metadata.", "Updates asset's metadata and returns asset descriptor.")]
     [SwaggerResponse(200, "Updated asset details.", typeof(ContentResponse<ProductAsset>))]
     [SwaggerResponse(400, "Validation error.", typeof(BaseResponse))]
     [SwaggerResponse(404, "Asset not found error.", typeof(BaseResponse))]
     public async Task<ActionResult<ContentResponse<ProductAsset>>> UpdateAssetDetailsAsync(
         [SwaggerParameter("ID of an asset to be updated.")] int assetId,
-        [FromBody, SwaggerParameter("Asset data to update.")] ModifyAssetDetailsDto assetDetailsDto
+        [FromBody, SwaggerRequestBody("Asset data to update.")] ModifyAssetDetailsDto assetDetailsDto
     )
     {
         var asset = await _assetsService.UpdateAssetDetailsAsync(assetId, assetDetailsDto);
@@ -56,6 +59,10 @@ public class AssetsController : ControllerBaseWrapper
     }
 
     [HttpDelete("{assetId:int}")]
+    [SwaggerOperation(
+        "Remove asset.",
+        "Removes asset with the given ID. If there is no asset with such ID – nothing happens."
+    )]
     [SwaggerResponse(204, "Success response.")]
     public async Task<NoContentResult> RemoveAssetAsync(
         [SwaggerParameter("ID of an asset to be removed.")] int assetId
