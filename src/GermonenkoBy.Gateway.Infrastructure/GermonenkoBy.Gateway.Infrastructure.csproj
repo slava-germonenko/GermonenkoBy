@@ -6,4 +6,12 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\GermonenkoBy.Gateway.Api\GermonenkoBy.Gateway.Api.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Contracts\Clients" />
+    </ItemGroup>
+
 </Project>

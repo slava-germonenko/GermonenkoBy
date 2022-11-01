@@ -1,4 +1,4 @@
-namespace GermonenkoBy.Authorization.Core.Dtos;
+namespace GermonenkoBy.Gateway.Api.Models.Auth;
 
 public class RefreshRefreshTokenDto
 {
