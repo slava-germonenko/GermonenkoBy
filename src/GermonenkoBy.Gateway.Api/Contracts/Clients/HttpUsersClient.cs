@@ -1,4 +1,5 @@
 using GermonenkoBy.Common.Domain;
+using GermonenkoBy.Common.Domain.Exceptions;
 using GermonenkoBy.Common.Utils;
 using GermonenkoBy.Common.Web.Http;
 using GermonenkoBy.Common.Web.Responses;
@@ -13,6 +14,20 @@ public class HttpUsersClient : IUsersClient
     public HttpUsersClient(HttpClient httpClient)
     {
         _httpClient = new HttpClientFacade(httpClient);
+    }
+
+    public async Task<User?> GetUserAsync(int userId)
+    {
+        try
+        {
+            var url = $"api/users/{userId}";
+            var response = await _httpClient.GetAsync<ContentResponse<User>>(url);
+            return response.Data;
+        }
+        catch (NotFoundException)
+        {
+            return null;
+        }
     }
 
     public async Task<PagedSet<User>> GetUsersAsync(UsersFilterDto usersFilter)

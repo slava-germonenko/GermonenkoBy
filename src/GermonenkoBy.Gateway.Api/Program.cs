@@ -62,6 +62,12 @@ builder.Services.AddHttpClient<IUsersClient, HttpUsersClient>(options =>
     options.BaseAddress = new Uri(usersServiceUrl);
 });
 
+var sessionServiceUrl = builder.Configuration.GetValue<string>("Routing:SessionsServiceUrl");
+builder.Services.AddHttpClient<IUserSessionsClient, HttpUserSessionsClient>(options =>
+{
+    options.BaseAddress = new Uri(sessionServiceUrl);
+});
+
 builder.Services.AddScoped<AccessTokenService>();
 builder.Services.AddScoped<UserAuthService>();
 

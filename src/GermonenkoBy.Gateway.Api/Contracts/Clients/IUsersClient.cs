@@ -5,5 +5,7 @@ namespace GermonenkoBy.Gateway.Api.Contracts.Clients;
 
 public interface IUsersClient
 {
+    public Task<User?> GetUserAsync(int userId);
+
     public Task<PagedSet<User>> GetUsersAsync(UsersFilterDto usersFilter);
 }
