@@ -11,6 +11,8 @@ public class HttpUsersClient : IUsersClient
 {
     private readonly HttpClientFacade _httpClient;
 
+    private const string UserSerializationErrorMessage = "Произошла ошибка при попытке серализовать объект пользователя.";
+
     public HttpUsersClient(HttpClient httpClient)
     {
         _httpClient = new HttpClientFacade(httpClient);
@@ -42,4 +44,18 @@ public class HttpUsersClient : IUsersClient
             Data = response.Data ?? new List<User>()
         };
     }
+
+    public async Task<User> CreateUserAsync(CreateUserDto userDto)
+    {
+        var response = await _httpClient.PostAsync<ContentResponse<User>>("api/users", body: userDto);
+        return response.Data ?? throw new Exception(UserSerializationErrorMessage);
+    }
+
+    public async Task<User> UpdateUserAsync(int userId, ModifyUserDto userDto)
+    {
+        var response = await _httpClient.PatchAsync<ContentResponse<User>>($"api/users/{userDto}", body: userDto);
+        return response.Data ?? throw new Exception(UserSerializationErrorMessage);
+    }
+
+    public Task DeleteUserAsync(int userId) => _httpClient.DeleteAsync($"api/user/{userId}");
 }

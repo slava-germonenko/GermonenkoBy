@@ -8,4 +8,10 @@ public interface IUsersClient
     public Task<User?> GetUserAsync(int userId);
 
     public Task<PagedSet<User>> GetUsersAsync(UsersFilterDto usersFilter);
+
+    public Task<User> CreateUserAsync(CreateUserDto userDto);
+
+    public Task<User> UpdateUserAsync(int userId, ModifyUserDto userDto);
+
+    public Task DeleteUserAsync(int userId);
 }
