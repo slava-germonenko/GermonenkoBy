@@ -8,20 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GermonenkoBy.UserTermination.Core\GermonenkoBy.UserTermination.Core.csproj" />
-      <ProjectReference Include="..\GermonenkoBy.UserTermination.Infrastructure\GermonenkoBy.UserTermination.Infrastructure.csproj" />
+      <ProjectReference Include="..\GermonenkoBy.Common.Utils\GermonenkoBy.Common.Utils.csproj" />
+      <ProjectReference Include="..\GermonenkoBy.Common.Web\GermonenkoBy.Common.Web.csproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
       <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.1.0" />
       <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
       <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Update=".dockerignore">
-        <DependentUpon>host-build.Dockerfile</DependentUpon>
-      </None>
     </ItemGroup>
 
 </Project>

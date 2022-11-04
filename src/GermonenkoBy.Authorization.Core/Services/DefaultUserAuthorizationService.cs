@@ -42,7 +42,7 @@ public class DefaultUserAuthorizationService
     public async Task<RefreshToken> AuthorizeAsync(AuthorizeDto authorizeDto)
     {
         var user = await _usersClient.GetUserAsync(authorizeDto.Login);
-        if (user is null)
+        if (user is null || !user.Active)
         {
             throw new CoreLogicException(DefaultAuthErrorMessage);
         }

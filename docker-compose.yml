@@ -1,4 +1,7 @@
 # DEV docker compose file
+# Note: it uses on-host-build dockerfiles
+# so before running compose build you need to build the solution
+# using "dotnet build -c Release" command
 
 version: "3.9"
 
@@ -13,6 +16,16 @@ services:
       dockerfile: "host-build.Dockerfile"
     ports:
       - "5005:80"
+  gateway:
+    image: "germonenko.by/gateway"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      AppConfigConnectionString: ${AppConfigConnectionString}
+    build:
+      context: "./src/GermonenkoBy.Gateway.Api"
+      dockerfile: "host-build.Dockerfile"
+    ports:
+      - "4000:80"
   products:
     image: "germonenko.by/products"
     environment:
