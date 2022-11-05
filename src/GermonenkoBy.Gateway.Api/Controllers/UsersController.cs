@@ -78,4 +78,18 @@ public class UsersController : ControllerBaseWrapper
         await _usersClient.DeleteUserAsync(userId);
         return NoContent();
     }
+
+    [HttpPatch("{userId:int}/password")]
+    [SwaggerOperation("Set user's password.", "Sets new password to a user.")]
+    [SwaggerResponse(204, "Success message")]
+    [SwaggerResponse(400, "Password does not meet security requirements error.", typeof(BaseResponse))]
+    [SwaggerResponse(404, "User not found error.", typeof(ContentResponse<BaseResponse>))]
+    public async Task<NoContentResult> SetPasswordAsync(
+        [SwaggerParameter("ID of a user.")] int userId,
+        [FromBody, SwaggerRequestBody("New password.")] PasswordRequest passwordRequest
+    )
+    {
+        await _usersClient.SetUserPasswordAsync(userId, passwordRequest.Password);
+        return NoContent();
+    }
 }

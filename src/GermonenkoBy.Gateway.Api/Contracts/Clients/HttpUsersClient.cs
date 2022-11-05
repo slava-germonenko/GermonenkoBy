@@ -57,5 +57,8 @@ public class HttpUsersClient : IUsersClient
         return response.Data ?? throw new Exception(UserSerializationErrorMessage);
     }
 
+    public Task SetUserPasswordAsync(int userId, string password)
+        => _httpClient.PatchAsync($"api/users/{userId}/password", body: new { password });
+
     public Task DeleteUserAsync(int userId) => _httpClient.DeleteAsync($"api/user/{userId}");
 }

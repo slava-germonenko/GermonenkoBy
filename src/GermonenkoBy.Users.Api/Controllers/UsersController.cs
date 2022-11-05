@@ -92,6 +92,20 @@ public class UsersController : ControllerBaseWrapper
         return NoContent();
     }
 
+    [HttpPatch("{userId:int}/password")]
+    [SwaggerOperation("Set user's password.", "Sets new password to a user.")]
+    [SwaggerResponse(204, "Success message")]
+    [SwaggerResponse(400, "Password does not meet security requirements error.", typeof(BaseResponse))]
+    [SwaggerResponse(404, "User not found error.", typeof(ContentResponse<BaseResponse>))]
+    public async Task<NoContentResult> SetPasswordAsync(
+        [SwaggerParameter("ID of a user.")] int userId,
+        [FromBody, SwaggerRequestBody("New password.")] PasswordRequest passwordRequest
+    )
+    {
+        await _usersService.SetPasswordAsync(userId, passwordRequest.Password);
+        return NoContent();
+    }
+
     [HttpPost("{userId:int}/password-validation")]
     [SwaggerOperation(
         "Validate user password.",
@@ -102,11 +116,11 @@ public class UsersController : ControllerBaseWrapper
     [SwaggerResponse(404, "User is not found.")]
     public async Task<ActionResult> ValidatePasswordAsync(
         [FromRoute, SwaggerParameter("ID of a user whose password should be validated.")] int userId,
-        [FromBody, SwaggerRequestBody("Password to validate.")] ValidatePasswordRequest validateRequest,
+        [FromBody, SwaggerRequestBody("Password to validate.")] PasswordRequest request,
         [FromServices] PasswordValidationService validationService
     )
     {
-        var valid = await validationService.PasswordIsValidAsync(userId, validateRequest.Password);
+        var valid = await validationService.PasswordIsValidAsync(userId, request.Password);
         return valid ? NoContent() : BadRequest(new BaseResponse("Неправильный пароль."));
     }
 }
