@@ -13,5 +13,7 @@ public interface IUsersClient
 
     public Task<User> UpdateUserAsync(int userId, ModifyUserDto userDto);
 
+    Task SetUserPasswordAsync(int userId, string password);
+
     public Task DeleteUserAsync(int userId);
 }

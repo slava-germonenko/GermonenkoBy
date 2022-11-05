@@ -97,6 +97,24 @@ public class UsersService
         return user;
     }
 
+    public async Task SetPasswordAsync(int userId, string password)
+    {
+        if (!_passwordPolicy.PasswordMeetsPolicyRequirements(password))
+        {
+            throw new CoreLogicException(_passwordPolicy.PolicyDescription);
+        }
+
+        var user = await _context.Users.FindAsync(userId);
+        if (user is null)
+        {
+            throw new NotFoundException($"Пользователь с идентификатором \"{userId}\" не найден.");
+        }
+
+        (user.PasswordHash, user.PasswordSalt) = _hasher.GetHash(password);
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task RemoveUserAsync(int userId)
     {
         var user = await _context.Users.FindAsync(userId);
