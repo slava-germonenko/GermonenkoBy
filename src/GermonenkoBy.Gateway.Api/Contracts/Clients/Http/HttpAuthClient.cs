@@ -2,7 +2,7 @@ using GermonenkoBy.Common.Web.Http;
 using GermonenkoBy.Common.Web.Responses;
 using GermonenkoBy.Gateway.Api.Models.Auth;
 
-namespace GermonenkoBy.Gateway.Api.Contracts.Clients;
+namespace GermonenkoBy.Gateway.Api.Contracts.Clients.Http;
 
 public class HttpAuthClient : IAuthClient
 {

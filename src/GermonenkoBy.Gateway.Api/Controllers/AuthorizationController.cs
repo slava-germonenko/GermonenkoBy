@@ -22,7 +22,7 @@ public class AuthorizationController : ControllerBaseWrapper
         _userAuthService = userAuthService;
     }
 
-    [HttpPost("")]
+    [HttpPost(""), Produces("application/json"),]
     [SwaggerOperation("User auth.", "Authorizes user by login and password.")]
     [SwaggerResponse(200, "Access token, refresh token and user data.", typeof(ContentResponse<AuthorizationResult>))]
     [SwaggerResponse(400, "Invalid login/password error.")]
@@ -36,7 +36,7 @@ public class AuthorizationController : ControllerBaseWrapper
         return OkWrapped(authResult);
     }
 
-    [HttpPost("refresh")]
+    [HttpPost("refresh"), Produces("application/json"),]
     [SwaggerOperation("Refresh token.", "Refreshes access and refresh tokens.")]
     [SwaggerResponse(200, "Refresh (auth) result.", typeof(ContentResponse<AuthorizationResult>))]
     [SwaggerResponse(401, "Unauthorized error.", typeof(BaseResponse))]
