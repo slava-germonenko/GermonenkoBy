@@ -3,7 +3,7 @@ using GermonenkoBy.Common.Web.Http;
 using GermonenkoBy.Common.Web.Responses;
 using GermonenkoBy.Gateway.Api.Models.Sessions;
 
-namespace GermonenkoBy.Gateway.Api.Contracts.Clients;
+namespace GermonenkoBy.Gateway.Api.Contracts.Clients.Http;
 
 public class HttpUserSessionsClient : IUserSessionsClient
 {

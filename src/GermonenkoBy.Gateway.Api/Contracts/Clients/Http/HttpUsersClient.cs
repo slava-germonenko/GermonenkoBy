@@ -5,7 +5,7 @@ using GermonenkoBy.Common.Web.Http;
 using GermonenkoBy.Common.Web.Responses;
 using GermonenkoBy.Gateway.Api.Models.Users;
 
-namespace GermonenkoBy.Gateway.Api.Contracts.Clients;
+namespace GermonenkoBy.Gateway.Api.Contracts.Clients.Http;
 
 public class HttpUsersClient : IUsersClient
 {

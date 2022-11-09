@@ -5,8 +5,11 @@ using Microsoft.IdentityModel.Tokens;
 
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Gateway.Api.Contracts.Clients;
+using GermonenkoBy.Gateway.Api.Contracts.Clients.Http;
 using GermonenkoBy.Gateway.Api.Options;
 using GermonenkoBy.Gateway.Api.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +27,7 @@ if (!string.IsNullOrEmpty(appConfigConnectionString))
 builder.Services.Configure<SecurityOptions>(builder.Configuration.GetSection("Security"));
 
 var jwtSecret = builder.Configuration.GetValue<string>("Security:JwtSecret");
-builder.Services.AddAuthentication()
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new()
@@ -48,6 +51,29 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Web API gateway that is used by the desktop web app.",
         Version = "0.1.0"
     });
+
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        BearerFormat = "JWT",
+        Name = "JWT Authentication",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        Description = "Put ",
+
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+
+    options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
 });
 
 var authServiceUrl = builder.Configuration.GetValue<string>("Routing:AuthorizationServiceUrl");
@@ -66,6 +92,12 @@ var sessionServiceUrl = builder.Configuration.GetValue<string>("Routing:Sessions
 builder.Services.AddHttpClient<IUserSessionsClient, HttpUserSessionsClient>(options =>
 {
     options.BaseAddress = new Uri(sessionServiceUrl);
+});
+
+var productsServiceUrl = builder.Configuration.GetValue<string>("Routing:ProductsServiceUrl");
+builder.Services.AddHttpClient<IMaterialsClient, HttpMaterialsClient>(options =>
+{
+    options.BaseAddress = new Uri(productsServiceUrl);
 });
 
 builder.Services.AddScoped<AccessTokenService>();
