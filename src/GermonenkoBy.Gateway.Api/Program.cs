@@ -76,26 +76,38 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var authServiceUrl = builder.Configuration.GetValue<string>("Routing:AuthorizationServiceUrl");
+var authServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:AuthorizationServiceUrl");
 builder.Services.AddHttpClient<IAuthClient, HttpAuthClient>(options =>
 {
     options.BaseAddress = new Uri(authServiceUrl);
 });
 
-var usersServiceUrl = builder.Configuration.GetValue<string>("Routing:UsersServiceUrl");
+var usersServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:UsersServiceUrl");
 builder.Services.AddHttpClient<IUsersClient, HttpUsersClient>(options =>
 {
     options.BaseAddress = new Uri(usersServiceUrl);
 });
 
-var sessionServiceUrl = builder.Configuration.GetValue<string>("Routing:SessionsServiceUrl");
+var sessionServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:SessionsServiceUrl");
 builder.Services.AddHttpClient<IUserSessionsClient, HttpUserSessionsClient>(options =>
 {
     options.BaseAddress = new Uri(sessionServiceUrl);
 });
 
-var productsServiceUrl = builder.Configuration.GetValue<string>("Routing:ProductsServiceUrl");
+var productsServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:ProductsServiceUrl");
 builder.Services.AddHttpClient<IMaterialsClient, HttpMaterialsClient>(options =>
+{
+    options.BaseAddress = new Uri(productsServiceUrl);
+});
+builder.Services.AddHttpClient<ICategoriesClient, HttpCategoriesClient>(options =>
+{
+    options.BaseAddress = new Uri(productsServiceUrl);
+});
+builder.Services.AddHttpClient<IProductsClient, HttpProductsClient>(options =>
+{
+    options.BaseAddress = new Uri(productsServiceUrl);
+});
+builder.Services.AddHttpClient<IProductAssetsClient, HttpProductAssetsClient>(options =>
 {
     options.BaseAddress = new Uri(productsServiceUrl);
 });

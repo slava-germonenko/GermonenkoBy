@@ -33,13 +33,13 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var usersServiceUrl = builder.Configuration.GetValue<string>("Routing:UsersServiceUrl");
+var usersServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:UsersServiceUrl");
 builder.Services.AddHttpClient<IUsersClient, HttpUsersClient>(options =>
 {
     options.BaseAddress = new Uri(usersServiceUrl);
 });
 
-var sessionsServiceUrl = builder.Configuration.GetValue<string>("Routing:SessionsServiceUrl");
+var sessionsServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:SessionsServiceUrl");
 builder.Services.AddHttpClient<IUserSessionsClient, HttpUserSessionsClient>(options =>
 {
     options.BaseAddress = new Uri(sessionsServiceUrl);

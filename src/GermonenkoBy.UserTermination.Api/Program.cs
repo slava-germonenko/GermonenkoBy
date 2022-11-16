@@ -29,7 +29,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var usersServiceBaseAddress = builder.Configuration.GetValue<string>("Routing:UsersServiceUrl");
+var usersServiceBaseAddress = builder.Configuration.GetValue<string>("Routing:Http:UsersServiceUrl");
 builder.Services.AddHttpClient<IUsersClient, UsersClient>(
     UsersClient.ClientName,
     options =>
@@ -38,7 +38,7 @@ builder.Services.AddHttpClient<IUsersClient, UsersClient>(
     }
 );
 
-var sessionsServiceBaseAddress = builder.Configuration.GetValue<string>("Routing:SessionsServiceUrl");
+var sessionsServiceBaseAddress = builder.Configuration.GetValue<string>("Routing:Http:SessionsServiceUrl");
 builder.Services.AddHttpClient<IUserSessionsClient, UserSessionsClient>(
     UserSessionsClient.ClientName,
     options =>

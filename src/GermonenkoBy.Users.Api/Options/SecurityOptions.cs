@@ -4,5 +4,5 @@ namespace GermonenkoBy.Users.Api.Options;
 
 public class SecurityOptions : HashingOptions
 {
-    public int MinPasswordLenght { get; set; }
+    public int MinPasswordLength { get; set; }
 }
