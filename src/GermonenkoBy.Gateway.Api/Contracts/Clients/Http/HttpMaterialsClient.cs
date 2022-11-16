@@ -57,9 +57,7 @@ public class HttpMaterialsClient : IMaterialsClient
         return response.Data ?? throw new Exception(SerializationErrorMessage);
     }
 
-    public Task DeleteMaterial(int materialId) => _httpClient.DeleteAsync(
-        GetMaterialRoute(materialId)
-    );
+    public Task DeleteMaterial(int materialId) => _httpClient.DeleteAsync(GetMaterialRoute(materialId));
 
     private static string GetMaterialRoute(int materialId) => $"{BaseMaterialsRoute}/{materialId}";
 }

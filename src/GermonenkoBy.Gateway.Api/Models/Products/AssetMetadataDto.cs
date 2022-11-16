@@ -1,6 +1,6 @@
 namespace GermonenkoBy.Gateway.Api.Models.Products;
 
-public class ModifyAssetDetailsDto
+public class AssetMetadataDto
 {
     public int? ProductId { get; set; }
 }

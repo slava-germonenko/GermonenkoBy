@@ -107,7 +107,10 @@ builder.Services.AddHttpClient<IProductsClient, HttpProductsClient>(options =>
 {
     options.BaseAddress = new Uri(productsServiceUrl);
 });
-
+builder.Services.AddHttpClient<IProductAssetsClient, HttpProductAssetsClient>(options =>
+{
+    options.BaseAddress = new Uri(productsServiceUrl);
+});
 
 builder.Services.AddScoped<AccessTokenService>();
 builder.Services.AddScoped<UserAuthService>();

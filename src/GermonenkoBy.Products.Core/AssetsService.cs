@@ -64,7 +64,7 @@ public class AssetsService
         return asset;
     }
 
-    public async Task<ProductAsset> UpdateAssetDetailsAsync(int assetId, ModifyAssetDetailsDto assetDetailsDto)
+    public async Task<ProductAsset> UpdateAssetDetailsAsync(int assetId, AssetMetadataDto assetMetadataDto)
     {
         var assetToUpdate = await _context.ProductAssets.FindAsync(assetId);
         if (assetToUpdate is null)
@@ -72,25 +72,25 @@ public class AssetsService
             throw new NotFoundException($"Ассет с идентификатором \"{assetId}\" не найден.");
         }
 
-        if (assetDetailsDto.ProductId is not null)
+        if (assetMetadataDto.ProductId is not null)
         {
-            await EnsureProductExists(assetDetailsDto.ProductId.Value);
+            await EnsureProductExists(assetMetadataDto.ProductId.Value);
         }
 
-        assetToUpdate.ProductId = assetDetailsDto.ProductId;
+        assetToUpdate.ProductId = assetMetadataDto.ProductId;
         _context.ProductAssets.Update(assetToUpdate);
         await _context.SaveChangesAsync();
 
-        if (assetToUpdate.FileName is not null && assetDetailsDto.ProductId is not null)
+        if (assetToUpdate.FileName is not null && assetMetadataDto.ProductId is not null)
         {
             await _assetsBlobClient.SetAssetPropertyAsync(
                 assetToUpdate.FileName,
                 AssignedKey,
-                assetDetailsDto.ProductId.Value.ToString()
+                assetMetadataDto.ProductId.Value.ToString()
             );
         }
 
-        if (assetToUpdate.FileName is not null && assetDetailsDto.ProductId is null)
+        if (assetToUpdate.FileName is not null && assetMetadataDto.ProductId is null)
         {
             await _assetsBlobClient.SetAssetPropertyAsync(
                 assetToUpdate.FileName,

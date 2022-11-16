@@ -1,33 +1,32 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 using GermonenkoBy.Common.Web;
 using GermonenkoBy.Common.Web.Responses;
-using GermonenkoBy.Products.Core;
-using GermonenkoBy.Products.Core.Dtos;
-using GermonenkoBy.Products.Core.Models;
+using GermonenkoBy.Gateway.Api.Contracts.Clients;
+using GermonenkoBy.Gateway.Api.Models.Products;
 
-namespace GermonenkoBy.Products.Api.Controllers;
+namespace GermonenkoBy.Gateway.Api.Controllers;
 
-[ApiController, Route("api/assets")]
+[ApiController, Authorize, Route("api/assets")]
 public class AssetsController : ControllerBaseWrapper
 {
-    private readonly AssetsService _assetsService;
+    private readonly IProductAssetsClient _productAssetsClient;
 
-    public AssetsController(AssetsService assetsService)
+    public AssetsController(IProductAssetsClient productAssetsClient)
     {
-        _assetsService = assetsService;
+        _productAssetsClient = productAssetsClient;
     }
 
     [HttpGet("")]
     [SwaggerOperation("Search product assets.", "Searches assets using filter parameters provided via query.")]
     [SwaggerResponse(200, "Uploaded product asset.", typeof(ContentListResponse<ProductAsset>))]
     public async Task<ActionResult<ContentListResponse<ProductAsset>>> GetAssetsAsync(
-        [FromQuery, SwaggerParameter("Assets filter DTO.")] AssetsFilterDto filterDto,
-        [FromServices] AssetsSearchService searchService
+        [FromQuery, SwaggerParameter("Assets filter DTO.")] AssetsFilterDto filterDto
     )
     {
-        var assets = await searchService.GetProductAssetsAsync(filterDto);
+        var assets = await _productAssetsClient.GetAssetsAsync(filterDto);
         return OkWrapped(assets);
     }
 
@@ -40,7 +39,7 @@ public class AssetsController : ControllerBaseWrapper
         [FromBody, SwaggerRequestBody("Asset DTO to be uploaded.")] UploadAssetDto assetDto
     )
     {
-        var asset = await _assetsService.UploadAssetAsync(assetDto);
+        var asset = await _productAssetsClient.UploadAssetAsync(assetDto);
         return OkWrapped(asset);
     }
 
@@ -54,7 +53,7 @@ public class AssetsController : ControllerBaseWrapper
         [FromBody, SwaggerRequestBody("Asset data to update.")] AssetMetadataDto assetMetadataDto
     )
     {
-        var asset = await _assetsService.UpdateAssetDetailsAsync(assetId, assetMetadataDto);
+        var asset = await _productAssetsClient.UpdateAssetMetadataAsync(assetId, assetMetadataDto);
         return OkWrapped(asset);
     }
 
@@ -68,7 +67,7 @@ public class AssetsController : ControllerBaseWrapper
         [SwaggerParameter("ID of an asset to be removed.")] int assetId
     )
     {
-        await _assetsService.DeleteAssetAsync(assetId);
+        await _productAssetsClient.RemoveAssetAsync(assetId);
         return NoContent();
     }
 }

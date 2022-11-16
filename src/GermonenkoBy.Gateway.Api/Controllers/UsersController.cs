@@ -9,7 +9,7 @@ using GermonenkoBy.Gateway.Api.Models.Users;
 
 namespace GermonenkoBy.Gateway.Api.Controllers;
 
-[ApiController, Authorize, Produces("application/json"), Route("api/users")]
+[ApiController, Authorize, Route("api/users")]
 public class UsersController : ControllerBaseWrapper
 {
     private readonly IUsersClient _usersClient;

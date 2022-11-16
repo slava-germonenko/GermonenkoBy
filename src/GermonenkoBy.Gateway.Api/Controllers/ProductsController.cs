@@ -9,7 +9,7 @@ using GermonenkoBy.Gateway.Api.Models.Products;
 
 namespace GermonenkoBy.Gateway.Api.Controllers;
 
-[ApiController, Authorize, Produces("application/json"), Route("api/products")]
+[ApiController, Authorize, Route("api/products")]
 public class ProductsController : ControllerBaseWrapper
 {
     private readonly IProductsClient _productsClient;
