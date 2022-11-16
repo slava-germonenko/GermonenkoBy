@@ -12,7 +12,7 @@ public class SimplePasswordPolicy : IPasswordPolicy
 {
     private readonly IOptionsSnapshot<SecurityOptions> _securityOptions;
 
-    private int PasswordLen => _securityOptions.Value.MinPasswordLenght;
+    private int PasswordLen => _securityOptions.Value.MinPasswordLength;
 
     public string PolicyDescription => $"Пароль должен содержать как минимум {PasswordLen} символов!";
 

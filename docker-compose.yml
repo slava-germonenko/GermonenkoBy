@@ -9,7 +9,7 @@ services:
   auth:
     image: "germonenko.by/auth"
     environment:
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       AppConfigConnectionString: ${AppConfigConnectionString}
     build:
       context: "./src/GermonenkoBy.Authorization.Api"
@@ -19,7 +19,7 @@ services:
   gateway:
     image: "germonenko.by/gateway"
     environment:
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       AppConfigConnectionString: ${AppConfigConnectionString}
     build:
       context: "./src/GermonenkoBy.Gateway.Api"
@@ -29,7 +29,7 @@ services:
   products:
     image: "germonenko.by/products"
     environment:
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       AppConfigConnectionString: ${AppConfigConnectionString}
     build:
       context: "./src/GermonenkoBy.Products.Api"
@@ -39,7 +39,7 @@ services:
   sessions:
     image: "germonenko.by/sessions"
     environment:
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       AppConfigConnectionString: ${AppConfigConnectionString}
     build:
       context: "./src/GermonenkoBy.Sessions.Api"
@@ -49,7 +49,7 @@ services:
   users:
     image: "germonenko.by/users"
     environment:
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       AppConfigConnectionString: ${AppConfigConnectionString}
     build:
       context: "./src/GermonenkoBy.Users.Api"
@@ -59,7 +59,7 @@ services:
   user-termination:
     image: "germonenko.by/user-termination"
     environment:
-      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_DEVELOPMENT}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       AppConfigConnectionString: ${AppConfigConnectionString}
     build:
       context: "./src/GermonenkoBy.UserTermination.Api"

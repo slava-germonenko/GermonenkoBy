@@ -36,7 +36,7 @@ builder.Services.AddDbContext<SessionsContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-var usersServiceBaseAddress = builder.Configuration.GetValue<string>("Routing:UsersServiceUrl");
+var usersServiceBaseAddress = builder.Configuration.GetValue<string>("Routing:Http:UsersServiceUrl");
 builder.Services.AddHttpClient<IUsersClient, UsersClient>(
     UsersClient.ClientName,
     options =>

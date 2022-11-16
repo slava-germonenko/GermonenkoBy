@@ -38,9 +38,15 @@ builder.Services.AddDbContext<UsersContext>(contextOptionsBuilder =>
     contextOptionsBuilder.UseSqlServer(connectionString);
 });
 
-builder.Services.Configure<SecurityOptions>(
-    builder.Configuration.GetSection("Security")
-);
+builder.Services.Configure<SecurityOptions>(options =>
+{
+    // Simply set to default as there is no need to store in the app configuration
+    // (at least now)
+    options.MinPasswordLength = 8;
+    options.DefaultSaltLenght = 32;
+    options.PasswordHashBytesLenght = 32;
+    options.PasswordHashIterationsCount = 10000;
+});
 builder.Services.AddScoped<PasswordValidationService>();
 builder.Services.AddScoped<UsersSearchService>();
 builder.Services.AddScoped<UsersService>();
