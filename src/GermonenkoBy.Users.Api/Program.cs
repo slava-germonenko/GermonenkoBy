@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.Options;
@@ -5,12 +6,26 @@ using Microsoft.Extensions.Options;
 using GermonenkoBy.Common.Utils.Hashing;
 using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
+using GermonenkoBy.Users.Api.Grpc;
+using GermonenkoBy.Users.Api.MapperProfiles;
 using GermonenkoBy.Users.Api.Options;
 using GermonenkoBy.Users.Api.Services;
 using GermonenkoBy.Users.Core;
 using GermonenkoBy.Users.Core.Contracts;
+using UsersService = GermonenkoBy.Users.Core.UsersService;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var restPort = builder.Configuration.GetValue<int>("Hosting:RestPort");
+var grpcPort = builder.Configuration.GetValue<int>("Hosting:GrpcPort");
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenLocalhost(restPort);
+    options.ListenLocalhost(grpcPort, opt =>
+    {
+        opt.Protocols = HttpProtocols.Http2;
+    });
+});
 
 var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
@@ -23,7 +38,10 @@ if (!string.IsNullOrEmpty(appConfigConnectionString))
     });
 }
 
+builder.Services.AddGrpcReflection();
+builder.Services.AddGrpc();
 builder.Services.AddControllers();
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.EnableAnnotations();
@@ -31,6 +49,12 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Users microservice"
     });
+});
+
+builder.Services.AddAutoMapper(options =>
+{
+    options.AddProfile<GrpcUserRequestProfile>();
+    options.AddProfile<GrpcUserResponseProfile>();
 });
 
 var connectionString = builder.Configuration.GetValueUnsafe<string>("CoreDatabaseConnectionString");
@@ -82,6 +106,8 @@ var errorHandlingBehaviour = app.Environment.IsDevelopment()
     ? ExceptionHandlingBehavior.RethrowDetailedError
     : ExceptionHandlingBehavior.RethrowGenericError;
 
+app.MapGrpcReflectionService();
+app.MapGrpcService<UsersGrpcService>();
 app.UseMiddleware<ExceptionHandlingMiddleware>(errorHandlingBehaviour);
 app.MapControllers();
 app.Run();

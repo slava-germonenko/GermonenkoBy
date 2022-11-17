@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package users;
+
+option csharp_namespace = "GermonenkoBy.Users.Api.Grpc";
+
+message CreateUserRequest {
+  string email_address = 1;
+  string first_name = 5;
+  string last_name = 6;
+  bool active = 10;
+  string password = 11;
+}
+
+message UserResponse {
+  int32 user_id = 1;
+  string email_address = 2;
+  string first_name = 6;
+  string last_name = 7;
+  bool active = 10;
+}
+
+service UsersService {
+  rpc CreateUser(CreateUserRequest) returns (UserResponse);
+}
