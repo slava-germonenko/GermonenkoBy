@@ -25,6 +25,20 @@ public class UsersGrpcService : UsersService.UsersServiceBase
         _usersSearchService = usersSearchService;
     }
 
+    public override async Task<UserResponse> GetUser(GetSingleUserRequest request, ServerCallContext context)
+    {
+        try
+        {
+            var user = await _usersService.GetUserAsync(request.UserId);
+            return _mapper.Map<UserResponse>(user);
+        }
+        catch (NotFoundException e)
+        {
+            context.Status = new Status(StatusCode.NotFound, e.Message);
+            return new UserResponse();
+        }
+    }
+
     public override async Task<UsersListResponse> SearchUsers(SearchUsersRequest request, ServerCallContext context)
     {
         var filter = _mapper.Map<UsersFilterDto>(request);

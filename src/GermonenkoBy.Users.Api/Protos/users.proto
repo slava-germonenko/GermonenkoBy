@@ -44,6 +44,10 @@ message UpdateUserPasswordRequest {
   string password = 2;
 }
 
+message GetSingleUserRequest {
+  int32 user_id = 1;
+}
+
 message SearchUsersRequest {
   optional string search = 1;
   optional int32 offset = 2;
@@ -72,6 +76,7 @@ message UsersListResponse {
 }
 
 service UsersService {
+  rpc GetUser(GetSingleUserRequest) returns (UserResponse);
   rpc SearchUsers(SearchUsersRequest) returns (UsersListResponse);
   rpc CreateUser(CreateUserRequest) returns (UserResponse);
   rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
