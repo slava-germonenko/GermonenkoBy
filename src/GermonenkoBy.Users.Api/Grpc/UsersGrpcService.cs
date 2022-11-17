@@ -4,6 +4,7 @@ using AutoMapper;
 using Grpc.Core;
 
 using GermonenkoBy.Common.Domain.Exceptions;
+using GermonenkoBy.Users.Core;
 using GermonenkoBy.Users.Core.Dtos;
 using GermonenkoBy.Users.Core.Exceptions;
 
@@ -15,10 +16,29 @@ public class UsersGrpcService : UsersService.UsersServiceBase
 
     private readonly Core.UsersService _usersService;
 
-    public UsersGrpcService(IMapper mapper, Core.UsersService usersService)
+    private readonly UsersSearchService _usersSearchService;
+
+    public UsersGrpcService(IMapper mapper, Core.UsersService usersService, UsersSearchService usersSearchService)
     {
         _mapper = mapper;
         _usersService = usersService;
+        _usersSearchService = usersSearchService;
+    }
+
+    public override async Task<UsersListResponse> SearchUsers(SearchUsersRequest request, ServerCallContext context)
+    {
+        var filter = _mapper.Map<UsersFilterDto>(request);
+        var usersList = await _usersSearchService.SearchUsersListAsync(filter);
+        var response = new UsersListResponse
+        {
+            Count = usersList.Count,
+            Total = usersList.Total,
+            Offset = usersList.Offset,
+        };
+        response.Users.AddRange(
+            usersList.Data.Select(_mapper.Map<UserResponse>)
+        );
+        return response;
     }
 
     public override async Task<UserResponse> CreateUser(CreateUserRequest request, ServerCallContext context)
