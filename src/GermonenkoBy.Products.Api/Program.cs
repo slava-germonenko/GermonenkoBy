@@ -3,6 +3,7 @@ using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 using GermonenkoBy.Common.HostedServices;
+using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Products.Core;
 using GermonenkoBy.Products.Core.Contracts.Clients;
@@ -10,10 +11,11 @@ using GermonenkoBy.Products.Core.Contracts.Repositories;
 using GermonenkoBy.Products.Core.HostedServices;
 using GermonenkoBy.Products.Infrastructure.Clients;
 using GermonenkoBy.Products.Infrastructure.Contracts;
+using GermonenkoBy.Products.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var appConfigConnectionString = builder.Configuration.GetValue<string>("AppConfigConnectionString");
+var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
@@ -34,13 +36,13 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var sqlConnectionString = builder.Configuration.GetValue<string>("CoreDatabaseConnectionString");
+var sqlConnectionString = builder.Configuration.GetValueUnsafe<string>("CoreDatabaseConnectionString");
 builder.Services.AddDbContext<ProductsContext>(contextOptionsBuilder =>
 {
     contextOptionsBuilder.UseSqlServer(sqlConnectionString);
 });
 
-var storageConnectionString = builder.Configuration.GetValue<string>("StorageAccountConnectionString");
+var storageConnectionString = builder.Configuration.GetValueUnsafe<string>("StorageAccountConnectionString");
 builder.Services.AddAzureClients(azureBuilder =>
 {
     azureBuilder.AddBlobServiceClient(storageConnectionString);
