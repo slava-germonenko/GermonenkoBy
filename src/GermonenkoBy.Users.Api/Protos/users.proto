@@ -18,6 +18,12 @@ enum OrderBy {
   ORDER_BY_LAST_NAME = 7;
 }
 
+enum UserPasswordStatus {
+  USER_PASSWORD_STATUS_USER_NOT_FOUND = 0;
+  USER_PASSWORD_STATUS_VALID = 1;
+  USER_PASSWORD_STATUS_INVALID = 2;
+}
+
 enum OrderDirection {
   ORDER_DIRECTION_ASC = 0;
   ORDER_DIRECTION_DESC = 1;
@@ -48,6 +54,15 @@ message GetSingleUserRequest {
   int32 user_id = 1;
 }
 
+message DeleteUserRequest {
+  int32 user_id = 1;
+}
+
+message ValidatePasswordRequest {
+  int32 user_id = 1;
+  string password = 2;
+}
+
 message SearchUsersRequest {
   optional string search = 1;
   optional int32 offset = 2;
@@ -75,10 +90,20 @@ message UsersListResponse {
   int32 count = 4;
 }
 
+message PasswordValidationResponse {
+  UserPasswordStatus status = 1;
+}
+
+message DeleteUserResponse {
+  bool existed = 1;
+}
+
 service UsersService {
   rpc GetUser(GetSingleUserRequest) returns (UserResponse);
   rpc SearchUsers(SearchUsersRequest) returns (UsersListResponse);
   rpc CreateUser(CreateUserRequest) returns (UserResponse);
   rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
   rpc UpdateUserPassword(UpdateUserPasswordRequest) returns (UserResponse);
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+  rpc ValidatePassword(ValidatePasswordRequest) returns (PasswordValidationResponse);
 }

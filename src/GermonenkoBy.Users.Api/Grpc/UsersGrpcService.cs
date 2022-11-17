@@ -14,13 +14,21 @@ public class UsersGrpcService : UsersService.UsersServiceBase
 {
     private readonly IMapper _mapper;
 
+    private readonly PasswordValidationService _passwordValidationService;
+
     private readonly Core.UsersService _usersService;
 
     private readonly UsersSearchService _usersSearchService;
 
-    public UsersGrpcService(IMapper mapper, Core.UsersService usersService, UsersSearchService usersSearchService)
+    public UsersGrpcService(
+        IMapper mapper,
+        PasswordValidationService passwordValidationService,
+        Core.UsersService usersService,
+        UsersSearchService usersSearchService
+    )
     {
         _mapper = mapper;
+        _passwordValidationService = passwordValidationService;
         _usersService = usersService;
         _usersSearchService = usersSearchService;
     }
@@ -119,6 +127,45 @@ public class UsersGrpcService : UsersService.UsersServiceBase
             context.Status = new Status(StatusCode.InvalidArgument, e.Message);
             return new UserResponse();
         }
+    }
+
+    public override async Task<PasswordValidationResponse> ValidatePassword(
+        ValidatePasswordRequest request,
+        ServerCallContext context
+    )
+    {
+        try
+        {
+            var valid = await _passwordValidationService.PasswordIsValidAsync(request.UserId, request.Password);
+            return new PasswordValidationResponse
+            {
+                Status = valid ? UserPasswordStatus.Valid : UserPasswordStatus.Invalid,
+            };
+        }
+        catch (NotFoundException e)
+        {
+            return new PasswordValidationResponse
+            {
+                Status = UserPasswordStatus.UserNotFound
+            };
+        }
+    }
+
+    public override async Task<DeleteUserResponse> DeleteUser(DeleteUserRequest request, ServerCallContext context)
+    {
+        var existed = false;
+        try
+        {
+            var user = await _usersService.GetUserAsync(request.UserId);
+            await _usersService.RemoveUserAsync(user.Id);
+            existed = true;
+        }
+        catch (NotFoundException) { }
+
+        return new DeleteUserResponse
+        {
+            Existed = existed,
+        };
     }
 
     private void EnsureModelIsValid<TModel>(TModel model)
