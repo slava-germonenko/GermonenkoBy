@@ -3,6 +3,7 @@ using GermonenkoBy.Common.Domain.Exceptions;
 using GermonenkoBy.Common.Utils.Hashing;
 using GermonenkoBy.Users.Core.Contracts;
 using GermonenkoBy.Users.Core.Dtos;
+using GermonenkoBy.Users.Core.Exceptions;
 using GermonenkoBy.Users.Core.Extensions;
 using GermonenkoBy.Users.Core.Models;
 
@@ -47,7 +48,7 @@ public class UsersService
         if (emailAddressIsInUse)
         {
             var message = $"Адрес электронной почты \"{userDto.EmailAddress}\" уже использутеся другим пользователем.";
-            throw new CoreLogicException(message);
+            throw new EmailAddressInUseException(message);
         }
 
         var user = new User();
@@ -69,7 +70,7 @@ public class UsersService
         if (emailAddressIsInUse)
         {
             var message = $"Адрес электронной почты \"{userDto.EmailAddress}\" уже использутеся другим пользователем.";
-            throw new CoreLogicException(message);
+            throw new EmailAddressInUseException(message);
         }
 
         var user = await GetUserAsync(userId);
