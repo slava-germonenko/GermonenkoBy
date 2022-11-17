@@ -62,6 +62,51 @@ public class UsersGrpcService : UsersService.UsersServiceBase
         }
     }
 
+    public override async Task<UserResponse> UpdateUser(UpdateUserRequest request, ServerCallContext context)
+    {
+        try
+        {
+            var updateDto = _mapper.Map<ModifyUserDto>(request);
+            EnsureModelIsValid(updateDto);
+            var updatedUser = await _usersService.UpdateUserBasicDataAsync(request.UserId, updateDto);
+            return _mapper.Map<UserResponse>(updatedUser);
+        }
+        catch (EmailAddressInUseException e)
+        {
+            context.Status = new Status(StatusCode.AlreadyExists, e.Message);
+            return new UserResponse();
+        }
+        catch (NotFoundException e)
+        {
+            context.Status = new Status(StatusCode.NotFound, e.Message);
+            return new UserResponse();
+        }
+        catch (Exception e) when (e is ValidationException or CoreLogicException)
+        {
+            context.Status = new Status(StatusCode.InvalidArgument, e.Message);
+            return new UserResponse();
+        }
+    }
+
+    public override async Task<UserResponse> UpdateUserPassword(UpdateUserPasswordRequest request, ServerCallContext context)
+    {
+        try
+        {
+            var user = await _usersService.UpdateUserPasswordAsync(request.UserId, request.Password);
+            return _mapper.Map<UserResponse>(user);
+        }
+        catch (NotFoundException e)
+        {
+            context.Status = new Status(StatusCode.NotFound, e.Message);
+            return new UserResponse();
+        }
+        catch (Exception e) when (e is ValidationException or CoreLogicException)
+        {
+            context.Status = new Status(StatusCode.InvalidArgument, e.Message);
+            return new UserResponse();
+        }
+    }
+
     private void EnsureModelIsValid<TModel>(TModel model)
     {
         if (model != null)
