@@ -27,23 +27,23 @@ public class UsersSearchService
             query = query.Where(user => user.Active == filter.Active);
         }
 
-        if (filter.FirstName is not null)
+        if (!string.IsNullOrEmpty(filter.FirstName))
         {
             query = query.Where(user => user.FirstName == filter.FirstName);
         }
 
-        if (filter.LastName is not null)
+        if (!string.IsNullOrEmpty(filter.LastName))
         {
             query = query.Where(user => user.LastName == filter.LastName);
         }
 
-        if (filter.EmailAddress is not null)
+        if (!string.IsNullOrEmpty(filter.EmailAddress))
         {
             query = query.Where(user => user.EmailAddress == filter.EmailAddress);
         }
 
         var search = filter.Search;
-        if (search is not null)
+        if (!string.IsNullOrEmpty(search))
         {
             query = query.Where(
                 user => user.FirstName.Contains(search)
