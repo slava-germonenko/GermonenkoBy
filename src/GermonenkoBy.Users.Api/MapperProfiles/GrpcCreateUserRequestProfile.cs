@@ -5,12 +5,12 @@ using GermonenkoBy.Users.Core.Dtos;
 
 namespace GermonenkoBy.Users.Api.MapperProfiles;
 
-public class GrpcUserRequestProfile : Profile
+public class GrpcCreateUserRequestProfile : Profile
 {
-    public GrpcUserRequestProfile()
+    public GrpcCreateUserRequestProfile()
     {
-        var map = CreateMap<CreateUserRequest, CreateUserDto>();
-        map.ForMember(userDto => userDto.EmailAddress, source => source.MapFrom(req => req.EmailAddress))
+        CreateMap<CreateUserRequest, CreateUserDto>()
+            .ForMember(userDto => userDto.EmailAddress, source => source.MapFrom(req => req.EmailAddress))
             .ForMember(userDto => userDto.FirstName, source => source.MapFrom(req => req.FirstName))
             .ForMember(userDto => userDto.LastName, source => source.MapFrom(req => req.LastName))
             .ForMember(userDto => userDto.Active, source => source.MapFrom(req => req.Active))

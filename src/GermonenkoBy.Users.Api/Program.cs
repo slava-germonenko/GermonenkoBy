@@ -53,7 +53,9 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddAutoMapper(options =>
 {
-    options.AddProfile<GrpcUserRequestProfile>();
+    options.AddProfile<GrpcSearchUsersRequestProfile>();
+    options.AddProfile<GrpcCreateUserRequestProfile>();
+    options.AddProfile<GrpcUpdateUserRequestProfile>();
     options.AddProfile<GrpcUserResponseProfile>();
 });
 

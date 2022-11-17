@@ -4,12 +4,75 @@ package users;
 
 option csharp_namespace = "GermonenkoBy.Users.Api.Grpc";
 
+enum UserStatus {
+  USER_STATUS_ALL = 0;
+  USER_STATUS_ACTIVE = 1;
+  USER_STATUS_INACTIVE = 2;
+}
+
+enum OrderBy {
+  ORDER_BY_CREATED_DATE = 0;
+  ORDER_BY_UPDATED_DATE = 1;
+  ORDER_BY_EMAIL_ADDRESS = 5;
+  ORDER_BY_FIRST_NAME = 6;
+  ORDER_BY_LAST_NAME = 7;
+}
+
+enum UserPasswordStatus {
+  USER_PASSWORD_STATUS_USER_NOT_FOUND = 0;
+  USER_PASSWORD_STATUS_VALID = 1;
+  USER_PASSWORD_STATUS_INVALID = 2;
+}
+
+enum OrderDirection {
+  ORDER_DIRECTION_ASC = 0;
+  ORDER_DIRECTION_DESC = 1;
+}
+
 message CreateUserRequest {
   string email_address = 1;
   string first_name = 5;
   string last_name = 6;
   bool active = 10;
   string password = 11;
+}
+
+message UpdateUserRequest {
+  int32 user_id = 1;
+  string email_address = 2;
+  string first_name = 5;
+  string last_name = 6;
+  bool active = 10;
+}
+
+message UpdateUserPasswordRequest {
+  int32 user_id = 1;
+  string password = 2;
+}
+
+message GetSingleUserRequest {
+  int32 user_id = 1;
+}
+
+message DeleteUserRequest {
+  int32 user_id = 1;
+}
+
+message ValidatePasswordRequest {
+  int32 user_id = 1;
+  string password = 2;
+}
+
+message SearchUsersRequest {
+  optional string search = 1;
+  optional int32 offset = 2;
+  optional int32 count = 3;
+  optional string email_address = 5;
+  optional string first_name = 6;
+  optional string last_name = 7;
+  optional UserStatus active = 8;
+  optional OrderBy order_by = 20;
+  optional OrderDirection order_direction = 21;
 }
 
 message UserResponse {
@@ -20,6 +83,27 @@ message UserResponse {
   bool active = 10;
 }
 
+message UsersListResponse {
+  repeated UserResponse users = 1;
+  int32 total = 2;
+  int32 offset = 3;
+  int32 count = 4;
+}
+
+message PasswordValidationResponse {
+  UserPasswordStatus status = 1;
+}
+
+message DeleteUserResponse {
+  bool existed = 1;
+}
+
 service UsersService {
+  rpc GetUser(GetSingleUserRequest) returns (UserResponse);
+  rpc SearchUsers(SearchUsersRequest) returns (UsersListResponse);
   rpc CreateUser(CreateUserRequest) returns (UserResponse);
+  rpc UpdateUser(UpdateUserRequest) returns (UserResponse);
+  rpc UpdateUserPassword(UpdateUserPasswordRequest) returns (UserResponse);
+  rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+  rpc ValidatePassword(ValidatePasswordRequest) returns (PasswordValidationResponse);
 }
