@@ -2,13 +2,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Swashbuckle.AspNetCore.Annotations;
 
+using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.UserTermination.Core;
 using GermonenkoBy.UserTermination.Core.Repositories;
 using GermonenkoBy.UserTermination.Infrastructure.Clients;
 
 var builder = WebApplication.CreateBuilder(args);
-var appConfigConnectionString = builder.Configuration.GetValue<string>("AppConfigConnectionString");
+var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
@@ -29,7 +30,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var usersServiceBaseAddress = builder.Configuration.GetValue<string>("Routing:Http:UsersServiceUrl");
+var usersServiceBaseAddress = builder.Configuration.GetValueUnsafe<string>("Routing:Http:UsersServiceUrl");
 builder.Services.AddHttpClient<IUsersClient, UsersClient>(
     UsersClient.ClientName,
     options =>
@@ -38,7 +39,7 @@ builder.Services.AddHttpClient<IUsersClient, UsersClient>(
     }
 );
 
-var sessionsServiceBaseAddress = builder.Configuration.GetValue<string>("Routing:Http:SessionsServiceUrl");
+var sessionsServiceBaseAddress = builder.Configuration.GetValueUnsafe<string>("Routing:Http:SessionsServiceUrl");
 builder.Services.AddHttpClient<IUserSessionsClient, UserSessionsClient>(
     UserSessionsClient.ClientName,
     options =>

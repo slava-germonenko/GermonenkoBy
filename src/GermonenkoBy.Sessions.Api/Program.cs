@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
+using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Sessions.Core;
 using GermonenkoBy.Sessions.Core.Repositories;
@@ -9,7 +10,7 @@ using GermonenkoBy.Sessions.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var appConfigConnectionString = builder.Configuration.GetValue<string>("AppConfigConnectionString");
+var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
@@ -30,13 +31,13 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var connectionString = builder.Configuration.GetValue<string>("CoreDatabaseConnectionString");
+var connectionString = builder.Configuration.GetValueUnsafe<string>("CoreDatabaseConnectionString");
 builder.Services.AddDbContext<SessionsContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
 
-var usersServiceBaseAddress = builder.Configuration.GetValue<string>("Routing:Http:UsersServiceUrl");
+var usersServiceBaseAddress = builder.Configuration.GetValueUnsafe<string>("Routing:Http:UsersServiceUrl");
 builder.Services.AddHttpClient<IUsersClient, UsersClient>(
     UsersClient.ClientName,
     options =>

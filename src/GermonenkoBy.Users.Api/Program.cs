@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.Options;
 
 using GermonenkoBy.Common.Utils.Hashing;
+using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Users.Api.Options;
 using GermonenkoBy.Users.Api.Services;
@@ -11,7 +12,7 @@ using GermonenkoBy.Users.Core.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var appConfigConnectionString = builder.Configuration.GetValue<string>("AppConfigConnectionString");
+var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
@@ -32,7 +33,7 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var connectionString = builder.Configuration.GetValue<string>("CoreDatabaseConnectionString");
+var connectionString = builder.Configuration.GetValueUnsafe<string>("CoreDatabaseConnectionString");
 builder.Services.AddDbContext<UsersContext>(contextOptionsBuilder =>
 {
     contextOptionsBuilder.UseSqlServer(connectionString);

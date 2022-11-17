@@ -8,11 +8,12 @@ using GermonenkoBy.Authorization.Core.Services;
 using GermonenkoBy.Authorization.Infrastructure.Contracts;
 using GermonenkoBy.Authorization.Infrastructure.Contracts.Clients;
 using GermonenkoBy.Common.HostedServices;
+using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var appConfigConnectionString = builder.Configuration.GetValue<string>("AppConfigConnectionString");
+var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
@@ -33,19 +34,19 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var usersServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:UsersServiceUrl");
+var usersServiceUrl = builder.Configuration.GetValueUnsafe<string>("Routing:Http:UsersServiceUrl");
 builder.Services.AddHttpClient<IUsersClient, HttpUsersClient>(options =>
 {
     options.BaseAddress = new Uri(usersServiceUrl);
 });
 
-var sessionsServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:SessionsServiceUrl");
+var sessionsServiceUrl = builder.Configuration.GetValueUnsafe<string>("Routing:Http:SessionsServiceUrl");
 builder.Services.AddHttpClient<IUserSessionsClient, HttpUserSessionsClient>(options =>
 {
     options.BaseAddress = new Uri(sessionsServiceUrl);
 });
 
-var coreConnectionString = builder.Configuration.GetValue<string>("CoreDatabaseConnectionString");
+var coreConnectionString = builder.Configuration.GetValueUnsafe<string>("CoreDatabaseConnectionString");
 builder.Services.AddDbContext<AuthorizationContext>(options =>
 {
     options.UseSqlServer(coreConnectionString);

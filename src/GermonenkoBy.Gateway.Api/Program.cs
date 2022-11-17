@@ -1,19 +1,20 @@
 using System.Text;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
+using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Gateway.Api.Contracts.Clients;
 using GermonenkoBy.Gateway.Api.Contracts.Clients.Http;
 using GermonenkoBy.Gateway.Api.Options;
 using GermonenkoBy.Gateway.Api.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var appConfigConnectionString = builder.Configuration.GetValue<string>("AppConfigConnectionString");
+var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
@@ -26,7 +27,7 @@ if (!string.IsNullOrEmpty(appConfigConnectionString))
 
 builder.Services.Configure<SecurityOptions>(builder.Configuration.GetSection("Security"));
 
-var jwtSecret = builder.Configuration.GetValue<string>("Security:JwtSecret");
+var jwtSecret = builder.Configuration.GetValueUnsafe<string>("Security:JwtSecret");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -76,25 +77,25 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var authServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:AuthorizationServiceUrl");
+var authServiceUrl = builder.Configuration.GetValueUnsafe<string>("Routing:Http:AuthorizationServiceUrl");
 builder.Services.AddHttpClient<IAuthClient, HttpAuthClient>(options =>
 {
     options.BaseAddress = new Uri(authServiceUrl);
 });
 
-var usersServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:UsersServiceUrl");
+var usersServiceUrl = builder.Configuration.GetValueUnsafe<string>("Routing:Http:UsersServiceUrl");
 builder.Services.AddHttpClient<IUsersClient, HttpUsersClient>(options =>
 {
     options.BaseAddress = new Uri(usersServiceUrl);
 });
 
-var sessionServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:SessionsServiceUrl");
+var sessionServiceUrl = builder.Configuration.GetValueUnsafe<string>("Routing:Http:SessionsServiceUrl");
 builder.Services.AddHttpClient<IUserSessionsClient, HttpUserSessionsClient>(options =>
 {
     options.BaseAddress = new Uri(sessionServiceUrl);
 });
 
-var productsServiceUrl = builder.Configuration.GetValue<string>("Routing:Http:ProductsServiceUrl");
+var productsServiceUrl = builder.Configuration.GetValueUnsafe<string>("Routing:Http:ProductsServiceUrl");
 builder.Services.AddHttpClient<IMaterialsClient, HttpMaterialsClient>(options =>
 {
     options.BaseAddress = new Uri(productsServiceUrl);
