@@ -7,6 +7,7 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'GermonenkoBy.UserTermination' " />
     <ItemGroup>
       <ProjectReference Include="..\GermonenkoBy.UserTermination.Core\GermonenkoBy.UserTermination.Core.csproj" />
       <ProjectReference Include="..\GermonenkoBy.UserTermination.Infrastructure\GermonenkoBy.UserTermination.Infrastructure.csproj" />
