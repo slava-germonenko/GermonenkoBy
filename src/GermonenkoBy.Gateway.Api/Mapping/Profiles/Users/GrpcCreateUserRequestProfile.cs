@@ -3,11 +3,11 @@ using AutoMapper;
 using GermonenkoBy.Gateway.Api.Models.Users;
 using GermonenkoBy.Users.Api.Grpc;
 
-namespace GermonenkoBy.Gateway.Api.MapperProfiles.Users;
+namespace GermonenkoBy.Gateway.Api.Mapping.Profiles.Users;
 
-public class GrpcCreateUserRequest : Profile
+public class GrpcCreateUserRequestProfile : Profile
 {
-    public GrpcCreateUserRequest()
+    public GrpcCreateUserRequestProfile()
     {
         CreateMap<CreateUserDto, CreateUserRequest>()
             .ForMember(req => req.Active, opt => opt.MapFrom(dto => dto.Active))

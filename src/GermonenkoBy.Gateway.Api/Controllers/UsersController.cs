@@ -9,14 +9,20 @@ using GermonenkoBy.Gateway.Api.Models.Users;
 
 namespace GermonenkoBy.Gateway.Api.Controllers;
 
-[ApiController, Authorize, Route("api/users")]
+[ApiController, /* Authorize, */ Route("api/users")]
 public class UsersController : ControllerBaseWrapper
 {
     private readonly IUsersClient _usersClient;
 
-    public UsersController(IUsersClient usersClient)
+    private readonly IUserTerminationClient _userTerminationClient;
+
+    public UsersController(
+        IUsersClient usersClient,
+        IUserTerminationClient userTerminationClient
+    )
     {
         _usersClient = usersClient;
+        _userTerminationClient = userTerminationClient;
     }
 
     [HttpGet("")]
@@ -75,7 +81,7 @@ public class UsersController : ControllerBaseWrapper
         [SwaggerParameter("ID of a user to be deleted.")] int userId
     )
     {
-        await _usersClient.DeleteUserAsync(userId);
+        await _userTerminationClient.TerminateAsync(userId);
         return NoContent();
     }
 

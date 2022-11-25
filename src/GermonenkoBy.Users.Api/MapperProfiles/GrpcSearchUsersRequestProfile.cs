@@ -30,7 +30,7 @@ public class GrpcSearchUsersRequestProfile : Profile
     private static bool? MapActive(UserStatus status) => status switch
     {
         UserStatus.Active => true,
-        UserStatus.Inactive => true,
+        UserStatus.Inactive => false,
         _ => null,
     };
 

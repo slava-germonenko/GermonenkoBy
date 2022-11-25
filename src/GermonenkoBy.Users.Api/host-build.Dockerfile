@@ -11,4 +11,5 @@ ENV Hosting__GrpcPort="443"
 
 COPY ./bin/Release/net7.0 /app
 WORKDIR /app
+
 ENTRYPOINT ["dotnet", "GermonenkoBy.Users.Api.dll"]

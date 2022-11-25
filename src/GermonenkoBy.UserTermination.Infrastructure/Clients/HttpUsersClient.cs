@@ -1,12 +1,12 @@
 using GermonenkoBy.Common.Domain.Exceptions;
 using GermonenkoBy.Common.Web.Http;
 using GermonenkoBy.Common.Web.Responses;
+using GermonenkoBy.UserTermination.Core.Clients;
 using GermonenkoBy.UserTermination.Core.Models;
-using GermonenkoBy.UserTermination.Core.Repositories;
 
 namespace GermonenkoBy.UserTermination.Infrastructure.Clients;
 
-public class UsersClient : IUsersClient
+public class HttpUsersClient : IUsersClient
 {
     public const string ClientName = "Users";
 
@@ -14,7 +14,7 @@ public class UsersClient : IUsersClient
 
     private const string BasesRoute = "api/users";
 
-    public UsersClient(HttpClient httpClient)
+    public HttpUsersClient(HttpClient httpClient)
     {
         _httpClient = new HttpClientFacade(httpClient);
     }

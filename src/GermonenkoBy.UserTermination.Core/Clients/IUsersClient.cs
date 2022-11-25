@@ -1,6 +1,6 @@
 using GermonenkoBy.UserTermination.Core.Models;
 
-namespace GermonenkoBy.UserTermination.Core.Repositories;
+namespace GermonenkoBy.UserTermination.Core.Clients;
 
 public interface IUsersClient
 {

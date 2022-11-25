@@ -10,14 +10,13 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Gateway.Api.Extensions;
-using GermonenkoBy.Gateway.Api.MapperProfiles;
-using GermonenkoBy.Gateway.Api.MapperProfiles.Users;
+using GermonenkoBy.Gateway.Api.Mapping.Profiles.Users;
 using GermonenkoBy.Gateway.Api.Options;
 using GermonenkoBy.Gateway.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
+var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("APP_CONFIG_CONNECTION_STRING");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
@@ -83,15 +82,14 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddAutoMapper(options =>
 {
+    options.AddProfile<GrpcCreateUserRequestProfile>();
+    options.AddProfile<GrpcUpdateUserRequestProfile>();
+    options.AddProfile<GrpcUserFilterProfile>();
     options.AddProfile<GrpcUserResponseProfile>();
 });
 
 builder.Services.RegisterHttpClients(builder.Configuration);
-// Don't put RegisterHttpClients into if-else block because some services may still be using pain HTTP
-if (builder.Configuration.GetValueUnsafe<bool>("EnableGrpCommunication"))
-{
-    builder.Services.RegisterGrpcClients(builder.Configuration);
-}
+builder.Services.RegisterGrpcClients(builder.Configuration);
 
 builder.Services.AddScoped<AccessTokenService>();
 builder.Services.AddScoped<UserAuthService>();

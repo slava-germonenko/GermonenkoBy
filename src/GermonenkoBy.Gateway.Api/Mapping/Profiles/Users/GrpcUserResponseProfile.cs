@@ -3,7 +3,7 @@ using AutoMapper;
 using GermonenkoBy.Gateway.Api.Models.Users;
 using GermonenkoBy.Users.Api.Grpc;
 
-namespace GermonenkoBy.Gateway.Api.MapperProfiles.Users;
+namespace GermonenkoBy.Gateway.Api.Mapping.Profiles.Users;
 
 public class GrpcUserResponseProfile : Profile
 {

@@ -1,15 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Swashbuckle.AspNetCore.Annotations;
 
 using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
+using GermonenkoBy.UserTermination.Api;
 using GermonenkoBy.UserTermination.Core;
-using GermonenkoBy.UserTermination.Core.Repositories;
-using GermonenkoBy.UserTermination.Infrastructure.Clients;
+using GermonenkoBy.UserTermination.Api.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
+var restPort = builder.Configuration.GetValue<int>("Hosting:RestPort");
+var grpcPort = builder.Configuration.GetValue<int>("Hosting:GrpcPort");
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(restPort);
+    options.ListenAnyIP(grpcPort, opt =>
+    {
+        opt.Protocols = HttpProtocols.Http2;
+    });
+});
+
+var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("APP_CONFIG_CONNECTION_STRING");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
@@ -20,6 +32,8 @@ if (!string.IsNullOrEmpty(appConfigConnectionString))
     });
 }
 
+builder.Services.AddGrpc();
+builder.Services.AddGrpcReflection();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -30,23 +44,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var usersServiceBaseAddress = builder.Configuration.GetValueUnsafe<string>("Routing:Http:UsersServiceUrl");
-builder.Services.AddHttpClient<IUsersClient, UsersClient>(
-    UsersClient.ClientName,
-    options =>
-    {
-        options.BaseAddress = new Uri(usersServiceBaseAddress);
-    }
-);
-
-var sessionsServiceBaseAddress = builder.Configuration.GetValueUnsafe<string>("Routing:Http:SessionsServiceUrl");
-builder.Services.AddHttpClient<IUserSessionsClient, UserSessionsClient>(
-    UserSessionsClient.ClientName,
-    options =>
-    {
-        options.BaseAddress = new Uri(sessionsServiceBaseAddress);
-    }
-);
+builder.Services.RegisterHttpClients(builder.Configuration);
+builder.Services.RegisterGrpcClients(builder.Configuration);
 
 builder.Services.AddScoped<UserTerminationService>();
 
@@ -67,6 +66,9 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = string.Empty;
     });
 }
+
+app.MapGrpcReflectionService();
+app.MapGrpcService<GrpcUserTerminationService>();
 
 app.MapDelete("api/user/{userId:int}",
     [SwaggerOperation("Terminate user.", "Removes all user associated items and terminates a user.")]

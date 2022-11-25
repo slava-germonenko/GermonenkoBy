@@ -14,12 +14,6 @@ public static class RegisterHttpClientsServiceCollectionExtensions
             options.BaseAddress = new Uri(authServiceUrl);
         });
 
-        var usersServiceUrl = configuration.GetValueUnsafe<string>("Routing:Http:UsersServiceUrl");
-        services.AddHttpClient<IUsersClient, HttpUsersClient>(options =>
-        {
-            options.BaseAddress = new Uri(usersServiceUrl);
-        });
-
         var sessionServiceUrl = configuration.GetValueUnsafe<string>("Routing:Http:SessionsServiceUrl");
         services.AddHttpClient<IUserSessionsClient, HttpUserSessionsClient>(options =>
         {

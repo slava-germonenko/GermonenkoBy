@@ -19,8 +19,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 var restPort = builder.Configuration.GetValue<int>("Hosting:RestPort");
 var grpcPort = builder.Configuration.GetValue<int>("Hosting:GrpcPort");
-Console.WriteLine($"REST port: {restPort}");
-Console.WriteLine($"gRPC port: {grpcPort}");
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(restPort);
@@ -30,7 +28,7 @@ builder.WebHost.ConfigureKestrel(options =>
     });
 });
 
-var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
+var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("APP_CONFIG_CONNECTION_STRING");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
     builder.Configuration.AddAzureAppConfiguration(options =>

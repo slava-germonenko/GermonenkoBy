@@ -1,7 +1,7 @@
 using GermonenkoBy.Common.Web.Http;
 using GermonenkoBy.Common.Web.Responses;
+using GermonenkoBy.UserTermination.Core.Clients;
 using GermonenkoBy.UserTermination.Core.Models;
-using GermonenkoBy.UserTermination.Core.Repositories;
 
 namespace GermonenkoBy.UserTermination.Infrastructure.Clients;
 

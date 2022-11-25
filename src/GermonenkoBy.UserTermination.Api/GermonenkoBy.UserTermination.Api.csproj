@@ -14,6 +14,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Grpc.AspNetCore" Version="2.50.0" />
+      <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.50.0" />
+      <PackageReference Include="Grpc.Tools" Version="2.50.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.1.0" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
       <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
@@ -21,9 +27,19 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="Extensions\" />
+    </ItemGroup>
+    <ItemGroup>
       <None Update=".dockerignore">
         <DependentUpon>host-build.Dockerfile</DependentUpon>
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+        <Protobuf Include="Protos\user_termination.proto" GrpcServices="Server" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Extensions\" />
+    </ItemGroup>
 </Project>

@@ -3,9 +3,7 @@
     "GermonenkoBy.Users.Api": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "Hosting__RestPort": "5001",
-        "Hosting__GrpcPort": "6001"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }
