@@ -8,7 +8,6 @@
         <UserSecretsId>384d88da-e579-4e17-b1e8-5118acbe7c50</UserSecretsId>
     </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(RunConfiguration)' == 'Users API' " />
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="12.0.0" />
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />

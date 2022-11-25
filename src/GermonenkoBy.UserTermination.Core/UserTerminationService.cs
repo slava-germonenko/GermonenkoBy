@@ -1,4 +1,4 @@
-using GermonenkoBy.UserTermination.Core.Repositories;
+using GermonenkoBy.UserTermination.Core.Clients;
 
 namespace GermonenkoBy.UserTermination.Core;
 

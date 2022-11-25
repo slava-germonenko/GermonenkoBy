@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
@@ -20,14 +21,14 @@ var restPort = builder.Configuration.GetValue<int>("Hosting:RestPort");
 var grpcPort = builder.Configuration.GetValue<int>("Hosting:GrpcPort");
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenLocalhost(restPort);
-    options.ListenLocalhost(grpcPort, opt =>
+    options.ListenAnyIP(restPort);
+    options.ListenAnyIP(grpcPort, opt =>
     {
         opt.Protocols = HttpProtocols.Http2;
     });
 });
 
-var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
+var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("APP_CONFIG_CONNECTION_STRING");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
     builder.Configuration.AddAzureAppConfiguration(options =>

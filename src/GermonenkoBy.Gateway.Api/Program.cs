@@ -2,19 +2,21 @@ using System.Text;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
+using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
-using GermonenkoBy.Gateway.Api.Contracts.Clients;
-using GermonenkoBy.Gateway.Api.Contracts.Clients.Http;
+using GermonenkoBy.Gateway.Api.Extensions;
+using GermonenkoBy.Gateway.Api.Mapping.Profiles.Users;
 using GermonenkoBy.Gateway.Api.Options;
 using GermonenkoBy.Gateway.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("AppConfigConnectionString");
+var appConfigConnectionString = builder.Configuration.GetValueUnsafe<string>("APP_CONFIG_CONNECTION_STRING");
 if (!string.IsNullOrEmpty(appConfigConnectionString))
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
@@ -23,6 +25,7 @@ if (!string.IsNullOrEmpty(appConfigConnectionString))
             .Select(KeyFilter.Any)
             .Select(KeyFilter.Any, builder.Environment.EnvironmentName);
     });
+    builder.Services.AddFeatureManagement();
 }
 
 builder.Services.Configure<SecurityOptions>(builder.Configuration.GetSection("Security"));
@@ -50,7 +53,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "Web API Gateway",
         Description = "Web API gateway that is used by the desktop web app.",
-        Version = "0.1.0"
+        Version = "0.1.0",
     });
 
     var jwtSecurityScheme = new OpenApiSecurityScheme
@@ -77,41 +80,16 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-var authServiceUrl = builder.Configuration.GetValueUnsafe<string>("Routing:Http:AuthorizationServiceUrl");
-builder.Services.AddHttpClient<IAuthClient, HttpAuthClient>(options =>
+builder.Services.AddAutoMapper(options =>
 {
-    options.BaseAddress = new Uri(authServiceUrl);
+    options.AddProfile<GrpcCreateUserRequestProfile>();
+    options.AddProfile<GrpcUpdateUserRequestProfile>();
+    options.AddProfile<GrpcUserFilterProfile>();
+    options.AddProfile<GrpcUserResponseProfile>();
 });
 
-var usersServiceUrl = builder.Configuration.GetValueUnsafe<string>("Routing:Http:UsersServiceUrl");
-builder.Services.AddHttpClient<IUsersClient, HttpUsersClient>(options =>
-{
-    options.BaseAddress = new Uri(usersServiceUrl);
-});
-
-var sessionServiceUrl = builder.Configuration.GetValueUnsafe<string>("Routing:Http:SessionsServiceUrl");
-builder.Services.AddHttpClient<IUserSessionsClient, HttpUserSessionsClient>(options =>
-{
-    options.BaseAddress = new Uri(sessionServiceUrl);
-});
-
-var productsServiceUrl = builder.Configuration.GetValueUnsafe<string>("Routing:Http:ProductsServiceUrl");
-builder.Services.AddHttpClient<IMaterialsClient, HttpMaterialsClient>(options =>
-{
-    options.BaseAddress = new Uri(productsServiceUrl);
-});
-builder.Services.AddHttpClient<ICategoriesClient, HttpCategoriesClient>(options =>
-{
-    options.BaseAddress = new Uri(productsServiceUrl);
-});
-builder.Services.AddHttpClient<IProductsClient, HttpProductsClient>(options =>
-{
-    options.BaseAddress = new Uri(productsServiceUrl);
-});
-builder.Services.AddHttpClient<IProductAssetsClient, HttpProductAssetsClient>(options =>
-{
-    options.BaseAddress = new Uri(productsServiceUrl);
-});
+builder.Services.RegisterHttpClients(builder.Configuration);
+builder.Services.RegisterGrpcClients(builder.Configuration);
 
 builder.Services.AddScoped<AccessTokenService>();
 builder.Services.AddScoped<UserAuthService>();
@@ -121,6 +99,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
+    options.DocExpansion(DocExpansion.None);
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     options.RoutePrefix = string.Empty;
 });

@@ -10,7 +10,7 @@ services:
     image: "germonenko.by/auth"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      AppConfigConnectionString: ${AppConfigConnectionString}
+      APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
     build:
       context: "./src/GermonenkoBy.Authorization.Api"
       dockerfile: "host-build.Dockerfile"
@@ -20,7 +20,7 @@ services:
     image: "germonenko.by/gateway"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      AppConfigConnectionString: ${AppConfigConnectionString}
+      APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
     build:
       context: "./src/GermonenkoBy.Gateway.Api"
       dockerfile: "host-build.Dockerfile"
@@ -30,7 +30,7 @@ services:
     image: "germonenko.by/products"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      AppConfigConnectionString: ${AppConfigConnectionString}
+      APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
     build:
       context: "./src/GermonenkoBy.Products.Api"
       dockerfile: "host-build.Dockerfile"
@@ -40,7 +40,7 @@ services:
     image: "germonenko.by/sessions"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      AppConfigConnectionString: ${AppConfigConnectionString}
+      APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
     build:
       context: "./src/GermonenkoBy.Sessions.Api"
       dockerfile: "host-build.Dockerfile"
@@ -50,7 +50,7 @@ services:
     image: "germonenko.by/users"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      AppConfigConnectionString: ${AppConfigConnectionString}
+      APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
     build:
       context: "./src/GermonenkoBy.Users.Api"
       dockerfile: "host-build.Dockerfile"
@@ -60,7 +60,7 @@ services:
     image: "germonenko.by/user-termination"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
-      AppConfigConnectionString: ${AppConfigConnectionString}
+      APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
     build:
       context: "./src/GermonenkoBy.UserTermination.Api"
       dockerfile: "host-build.Dockerfile"

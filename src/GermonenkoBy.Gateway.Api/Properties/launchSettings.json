@@ -1,8 +1,7 @@
-﻿{
+{
   "profiles": {
     "GermonenkoBy.Gateway.Api": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:4000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

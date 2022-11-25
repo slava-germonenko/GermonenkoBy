@@ -13,11 +13,29 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="12.0.0" />
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.0" />
       <PackageReference Include="Microsoft.Azure.AppConfiguration.AspNetCore" Version="5.1.0" />
       <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.0" />
+      <PackageReference Include="Microsoft.FeatureManagement.AspNetCore" Version="2.5.1" />
       <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.4.0" />
       <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.4.0" />
+      <PackageReference Include="Grpc.AspNetCore" Version="2.50.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Grpc.AspNetCore" />
+    </ItemGroup>
+    <ItemGroup>
+      <Protobuf Include="..\GermonenkoBy.Users.Api\Protos\users.proto" GrpcServices="Client">
+        <Link>Protos\users.proto</Link>
+      </Protobuf>
+      <Protobuf Include="..\GermonenkoBy.UserTermination.Api\Protos\user_termination.proto" GrpcServices="Client">
+        <Link>Protos\user_termination.proto</Link>
+      </Protobuf>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Mapping\Profiles" />
+    </ItemGroup>
 </Project>

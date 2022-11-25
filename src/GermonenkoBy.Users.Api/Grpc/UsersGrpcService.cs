@@ -142,7 +142,7 @@ public class UsersGrpcService : UsersService.UsersServiceBase
                 Status = valid ? UserPasswordStatus.Valid : UserPasswordStatus.Invalid,
             };
         }
-        catch (NotFoundException e)
+        catch (NotFoundException)
         {
             return new PasswordValidationResponse
             {

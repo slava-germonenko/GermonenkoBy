@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package users.termination;
+
+option csharp_namespace = "GermonenkoBy.UserTermination.Api.Grpc";
+
+message TerminateUserRequest {
+  int32 user_id = 1;
+}
+
+message TerminationResultResponse {
+}
+
+service UserTerminationService {
+  rpc Terminate(TerminateUserRequest) returns (TerminationResultResponse);
+}
