@@ -101,7 +101,7 @@ app.UseSwaggerUI(options =>
 {
     options.DocExpansion(DocExpansion.None);
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-    options.RoutePrefix = string.Empty;
+    options.RoutePrefix = "swagger";
 });
 
 var errorHandlingBehaviour = app.Environment.IsDevelopment()
