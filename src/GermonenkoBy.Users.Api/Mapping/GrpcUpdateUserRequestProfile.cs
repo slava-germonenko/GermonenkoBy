@@ -1,14 +1,14 @@
 using AutoMapper;
 
-using GermonenkoBy.Gateway.Api.Models.Users;
 using GermonenkoBy.Users.Api.Grpc;
+using GermonenkoBy.Users.Core.Dtos;
 
-namespace GermonenkoBy.Gateway.Api.Mapping.Profiles.Users;
+namespace GermonenkoBy.Users.Api.Mapping;
 
 public class GrpcUpdateUserRequestProfile : Profile
 {
     public GrpcUpdateUserRequestProfile()
     {
-        CreateMap<ModifyUserDto, UpdateUserRequest>();
+        CreateMap<UpdateUserRequest, ModifyUserDto>();
     }
 }

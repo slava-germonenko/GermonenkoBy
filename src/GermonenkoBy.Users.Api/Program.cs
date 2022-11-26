@@ -1,4 +1,3 @@
-using System.Net;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
@@ -8,7 +7,7 @@ using GermonenkoBy.Common.Utils.Hashing;
 using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Users.Api.Grpc;
-using GermonenkoBy.Users.Api.MapperProfiles;
+using GermonenkoBy.Users.Api.Mapping;
 using GermonenkoBy.Users.Api.Options;
 using GermonenkoBy.Users.Api.Services;
 using GermonenkoBy.Users.Core;
@@ -54,9 +53,9 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddAutoMapper(options =>
 {
-    options.AddProfile<GrpcSearchUsersRequestProfile>();
     options.AddProfile<GrpcCreateUserRequestProfile>();
     options.AddProfile<GrpcUpdateUserRequestProfile>();
+    options.AddProfile<GrpcSearchUsersRequestProfile>();
     options.AddProfile<GrpcUserResponseProfile>();
 });
 

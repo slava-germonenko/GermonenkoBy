@@ -11,9 +11,11 @@ public class GrpcUserResponseProfile : Profile
     {
         CreateMap<UserResponse, User>()
             .ForMember(user => user.Id, source => source.MapFrom(response => response.UserId))
-            .ForMember(user => user.EmailAddress, source => source.MapFrom(response => response.EmailAddress))
-            .ForMember(user => user.FirstName, source => source.MapFrom(response => response.FirstName))
-            .ForMember(user => user.LastName, source => source.MapFrom(response => response.LastName))
-            .ForMember(user => user.Active, source => source.MapFrom(response => response.Active));
+            .ForMember(user => user.CreatedDate, opt => opt.MapFrom(resp => resp.CreatedDate.ToDateTime()))
+            .ForMember(user => user.UpdatedDate, opt =>
+            {
+                opt.PreCondition(resp => resp.UpdatedDate != default);
+                opt.MapFrom(resp => resp.UpdatedDate.ToDateTime());
+            });
     }
 }

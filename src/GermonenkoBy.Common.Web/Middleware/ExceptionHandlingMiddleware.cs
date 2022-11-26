@@ -56,6 +56,7 @@ public class ExceptionHandlingMiddleware
             }
             case ExceptionHandlingBehavior.RethrowDetailedError:
             {
+                Console.WriteLine(exception);
                 var errorResponse = new DevErrorResponse(exception.Message, exception.StackTrace);
                 return context.WriteJsonResponse(HttpStatusCode.InternalServerError, errorResponse);
             }
