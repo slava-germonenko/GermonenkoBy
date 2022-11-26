@@ -8,6 +8,7 @@ version: "3.9"
 services:
   auth:
     image: "germonenko.by/auth"
+    container_name: "germonenkoby_auth"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
@@ -18,6 +19,7 @@ services:
       - "5005:80"
   gateway:
     image: "germonenko.by/gateway"
+    container_name: "germonenkoby_gateway"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
@@ -28,6 +30,7 @@ services:
       - "4000:80"
   products:
     image: "germonenko.by/products"
+    container_name: "germonenkoby_products"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
@@ -38,6 +41,7 @@ services:
       - "5002:80"
   sessions:
     image: "germonenko.by/sessions"
+    container_name: "germonenkoby_sessions"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
@@ -48,6 +52,7 @@ services:
       - "5003:80"
   users:
     image: "germonenko.by/users"
+    container_name: "germonenkoby/_users"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
@@ -58,6 +63,7 @@ services:
       - "5001:80"
   user-termination:
     image: "germonenko.by/user-termination"
+    container_name: "germonenkoby_user-termination"
     environment:
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
@@ -66,3 +72,12 @@ services:
       dockerfile: "host-build.Dockerfile"
     ports:
       - "5004:80"
+  web-server:
+    image: "nginx:alpine"
+    depends_on:
+      - gateway
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/local_docker:/etc/nginx/conf.d
