@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package users;
 
+import "google/protobuf/timestamp.proto";
+
 option csharp_namespace = "GermonenkoBy.Users.Api.Grpc";
 
 enum UserStatus {
@@ -81,6 +83,8 @@ message UserResponse {
   string first_name = 6;
   string last_name = 7;
   bool active = 10;
+  google.protobuf.Timestamp created_date = 11;
+  google.protobuf.Timestamp updated_date = 12;
 }
 
 message UsersListResponse {
