@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GermonenkoBy.Common.EntityFramework\GermonenkoBy.Common.EntityFramework.csproj" />
+      <ProjectReference Include="..\GermonenkoBy.Contacts.Core\GermonenkoBy.Contacts.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Grpc.Tools" />
+      <None Remove="Google.Protobuf" />
+      <None Remove="Grpc.Net.ClientFactory" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="12.0.0" />
+      <PackageReference Include="Grpc.Tools" Version="2.50.0">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+      </PackageReference>
+      <PackageReference Include="Google.Protobuf" Version="3.21.9" />
+      <PackageReference Include="Grpc.Net.ClientFactory" Version="2.50.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <Protobuf Include="..\GermonenkoBy.Users.Api\Protos\users.proto" GrpcServices="Client">
+        <Link>Protos\users.proto</Link>
+      </Protobuf>
+    </ItemGroup>
+</Project>

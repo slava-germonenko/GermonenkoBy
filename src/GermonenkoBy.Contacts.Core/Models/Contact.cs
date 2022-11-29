@@ -1,27 +1,25 @@
 using System.ComponentModel.DataAnnotations;
 
-using GermonenkoBy.Common.EntityFramework.Models;
-
 namespace GermonenkoBy.Contacts.Core.Models;
 
-public class Contact : IChangeDateTrackingModel
+public class Contact
 {
     public int Id { get; set; }
 
     public int? AssigneeId { get; set; }
 
-    [Required(ErrorMessage = "Имя – обязательное поле.")]
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Имя – обязательное поле.")]
     [StringLength(50, ErrorMessage = "Максимальная длина имени – 50 символов.")]
-    public required string FirstName { get; set; }
+    public string FirstName { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Фамилия – обязательное поле.")]
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Фамилия – обязательное поле.")]
     [StringLength(50, ErrorMessage = "Максимальная длина фамилии – 50 символов.")]
-    public required string LastName { get; set; }
+    public string LastName { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Номер телефона – обязательное поле.")]
+    [Required(AllowEmptyStrings = false, ErrorMessage = "Номер телефона – обязательное поле.")]
     [StringLength(10, ErrorMessage = "Максимальная длина номера телефона – 10 символов.")]
-    [RegularExpression(@"\d{8,10}", ErrorMessage = "Номер телефона – обязательное поле.")]
-    public required string PhoneNumber { get; set; }
+    [RegularExpression(@"\d{8,10}", ErrorMessage = "Номер телефона должен состоять только из цифр, а также содержать код страны..")]
+    public string PhoneNumber { get; set; } = string.Empty;
 
     public DateTime CreatedDate { get; set; }
 
@@ -31,5 +29,5 @@ public class Contact : IChangeDateTrackingModel
 
     public DateTime? DeletedDate { get; set; }
 
-    public required List<ContactEmailAddress> EmailAddresses { get; set; }
+    public List<ContactEmailAddress> EmailAddresses { get; set; } = new();
 }
