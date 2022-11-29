@@ -17,6 +17,17 @@ services:
       dockerfile: "host-build.Dockerfile"
     ports:
       - "5005:80"
+  contacts:
+    image: "germonenko.by/contacts"
+    container_name: "germonenko.by_contacts"
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      APP_CONFIG_CONNECTION_STRING: ${APP_CONFIG_CONNECTION_STRING}
+    build:
+      context: "./src/GermonenkoBy.Contacts.Api"
+      dockerfile: "host-build.Dockerfile"
+    ports:
+      - "6006:443"
   gateway:
     image: "germonenko.by/gateway"
     container_name: "germonenko.by_gateway"
