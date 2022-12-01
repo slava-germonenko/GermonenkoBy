@@ -12,6 +12,7 @@ message CreateContactRequest {
   string phone_number = 3;
   repeated string emails = 4;
   optional int32 assignee_id = 10;
+  bool mark_as_activity = 11;
 }
 
 message ContactEmailResponse {
@@ -34,5 +35,5 @@ message ContactResponse {
 }
 
 service ContactsService {
-  rpc CreateContact(ContactResponse) returns (ContactResponse);
+  rpc CreateContact(CreateContactRequest) returns (ContactResponse);
 }

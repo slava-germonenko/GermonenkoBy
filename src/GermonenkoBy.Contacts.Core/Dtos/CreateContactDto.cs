@@ -21,5 +21,6 @@ public class CreateContactDto
 
     public bool MarkAsActivity { get; set; } = false;
 
+    [MinLength(1)]
     public List<string> EmailAddresses { get; set; } = new();
 }

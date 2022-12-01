@@ -23,7 +23,7 @@ public class ContactsGrpcService : GrpcServiceBase
         _mapper = mapper;
     }
 
-    public override async Task<ContactResponse> CreateContact(ContactResponse request, ServerCallContext context)
+    public override async Task<ContactResponse> CreateContact(CreateContactRequest request, ServerCallContext context)
     {
         try
         {

@@ -1,5 +1,6 @@
 using Grpc.Core;
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 
 using GermonenkoBy.Common.Web.Extensions;
@@ -11,6 +12,7 @@ using GermonenkoBy.Contacts.Infrastructure.Clients;
 using GermonenkoBy.Contacts.Infrastructure.Clients.Grpc;
 using GermonenkoBy.Contacts.Infrastructure.Repos;
 using GermonenkoBy.Users.Api.Grpc;
+using GermonenkoBy.Contacts.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,11 +27,19 @@ if (!string.IsNullOrEmpty(appConfigConnectionString))
     });
 }
 
+builder.Services.AddDbContext<ContactsContext>(options =>
+{
+    var connectionString = builder.Configuration.GetValueUnsafe<string>("CoreDatabaseConnectionString");
+    options.UseSqlServer(connectionString);
+});
+
 builder.Services.AddGrpc();
+builder.Services.AddGrpcReflection();
 builder.Services.AddAutoMapper(options =>
 {
     options.AddProfile<ContactEmailResponseProfile>();
     options.AddProfile<ContactResponseProfile>();
+    options.AddProfile<CreateContactRequestProfile>();
 });
 builder.Services.AddGrpcClient<UsersService.UsersServiceClient>(options =>
 {
@@ -48,5 +58,6 @@ builder.Services.AddScoped<IUsersClient, GrpcUsersClient>();
 
 var app = builder.Build();
 
+app.MapGrpcReflectionService();
 app.MapGrpcService<ContactsGrpcService>();
 app.Run();
