@@ -1,6 +1,6 @@
 using AutoMapper;
-using Google.Protobuf.WellKnownTypes;
 
+using GermonenkoBy.Contacts.Api.Grpc;
 using GermonenkoBy.Contacts.Core.Models;
 using GermonenkoBy.Contacts.Api.Mapping.Converters;
 

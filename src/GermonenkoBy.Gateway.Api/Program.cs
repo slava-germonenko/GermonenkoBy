@@ -10,6 +10,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 using GermonenkoBy.Common.Web.Extensions;
 using GermonenkoBy.Common.Web.Middleware;
 using GermonenkoBy.Gateway.Api.Extensions;
+using GermonenkoBy.Gateway.Api.Mapping.Profiles.Contacts;
 using GermonenkoBy.Gateway.Api.Mapping.Profiles.Users;
 using GermonenkoBy.Gateway.Api.Options;
 using GermonenkoBy.Gateway.Api.Services;
@@ -86,6 +87,8 @@ builder.Services.AddAutoMapper(options =>
     options.AddProfile<GrpcUpdateUserRequestProfile>();
     options.AddProfile<GrpcUserFilterProfile>();
     options.AddProfile<GrpcUserResponseProfile>();
+
+    options.AddProfile<CreateContactDtoProfile>();
 });
 
 builder.Services.RegisterHttpClients(builder.Configuration);

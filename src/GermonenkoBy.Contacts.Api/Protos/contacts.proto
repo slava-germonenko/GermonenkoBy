@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "GermonenkoBy.Contacts.Api";
+option csharp_namespace = "GermonenkoBy.Contacts.Api.Grpc";
 
 package greet;
 

@@ -28,14 +28,14 @@
       <None Remove="Grpc.AspNetCore" />
     </ItemGroup>
     <ItemGroup>
-      <Protobuf Include="..\GermonenkoBy.Users.Api\Protos\users.proto" GrpcServices="Client">
-        <Link>Protos\users.proto</Link>
-      </Protobuf>
-      <Protobuf Include="..\GermonenkoBy.UserTermination.Api\Protos\user_termination.proto" GrpcServices="Client">
-        <Link>Protos\user_termination.proto</Link>
-      </Protobuf>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Mapping\Profiles" />
+        <Protobuf Include="..\GermonenkoBy.Contacts.Api\Protos\contacts.proto" GrpcServices="Client">
+            <Link>Protos\contacts.proto</Link>
+        </Protobuf>
+        <Protobuf Include="..\GermonenkoBy.Users.Api\Protos\users.proto" GrpcServices="Client">
+            <Link>Protos\users.proto</Link>
+        </Protobuf>
+        <Protobuf Include="..\GermonenkoBy.UserTermination.Api\Protos\user_termination.proto" GrpcServices="Client">
+            <Link>Protos\user_termination.proto</Link>
+        </Protobuf>
     </ItemGroup>
 </Project>

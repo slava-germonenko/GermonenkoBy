@@ -4,10 +4,11 @@ using AutoMapper;
 using Grpc.Core;
 
 using GermonenkoBy.Common.Domain.Exceptions;
+using GermonenkoBy.Contacts.Api.Grpc;
 using GermonenkoBy.Contacts.Core.Dtos;
 
 using ContactsCoreService = GermonenkoBy.Contacts.Core.Services.ContactsService;
-using GrpcServiceBase = GermonenkoBy.Contacts.Api.ContactsService.ContactsServiceBase;
+using GrpcServiceBase = GermonenkoBy.Contacts.Api.Grpc.ContactsService.ContactsServiceBase;
 
 namespace GermonenkoBy.Contacts.Api.Services;
 

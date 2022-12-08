@@ -1,6 +1,7 @@
 using Grpc.Core;
 
 using GermonenkoBy.Common.Web.Extensions;
+using GermonenkoBy.Contacts.Api.Grpc;
 using GermonenkoBy.Gateway.Api.Contracts.Clients;
 using GermonenkoBy.Gateway.Api.Contracts.Clients.Grpc;
 using GermonenkoBy.Users.Api.Grpc;
@@ -33,5 +34,16 @@ public static class RegisterGrpcClientsServiceCollectionExtensions
             });
         });
         services.AddScoped<IUserTerminationClient, GrpcUserTerminationClient>();
+
+        var contactsServiceUrl = configuration.GetValueUnsafe<string>("Routing:Grpc:Contacts");
+        services.AddGrpcClient<ContactsService.ContactsServiceClient>(options =>
+        {
+            options.Address = new Uri(contactsServiceUrl);
+            options.ChannelOptionsActions.Add(o =>
+            {
+                o.Credentials = ChannelCredentials.Insecure;
+            });
+        });
+        services.AddScoped<IContactsClient, GrpcContactsClient>();
     }
 }

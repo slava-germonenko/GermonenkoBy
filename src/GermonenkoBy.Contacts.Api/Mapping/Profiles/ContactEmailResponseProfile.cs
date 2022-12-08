@@ -1,5 +1,6 @@
 using AutoMapper;
 
+using GermonenkoBy.Contacts.Api.Grpc;
 using GermonenkoBy.Contacts.Api.Mapping.Converters;
 using GermonenkoBy.Contacts.Core.Models;
 

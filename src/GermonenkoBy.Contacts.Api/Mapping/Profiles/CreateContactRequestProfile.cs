@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+
+using GermonenkoBy.Contacts.Api.Grpc;
 using GermonenkoBy.Contacts.Core.Dtos;
 
 namespace GermonenkoBy.Contacts.Api.Mapping.Profiles
@@ -13,7 +15,7 @@ namespace GermonenkoBy.Contacts.Api.Mapping.Profiles
                     opt => opt.MapFrom(req => req.Emails.ToList())
                 )
                 .ForMember(
-                    dto => dto.AssigneeId, 
+                    dto => dto.AssigneeId,
                     opt => opt.PreCondition(req => req.AssigneeId != default)
                 );
         }
